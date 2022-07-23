@@ -2,7 +2,7 @@
 
 :root{
     --branco: #ffffff;
-    --cor-de-fundo:#ACADA8;
+    --cor-de-fundo:#566141;
     --cor-botao: #CCE69A;
     --cor-rodape: #566141;
     --fonte-principal:'Reggae One';
@@ -85,9 +85,11 @@ body{
 }
 
 .rodape{
-    padding: 1em;
-    background-color: var(--rodape) ;
-    margin-top: auto;
+    bottom: 0;
+    left: 0;
+    height: 40px;
+    position: fixed;
+    width: 100vw;
 }
 
 .rodape__texto{
