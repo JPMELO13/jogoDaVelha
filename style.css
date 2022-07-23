@@ -1,14 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Reggae+One&display=swap');
 
 :root{
-    --branco: #ffffff;
-    --cor-de-fundo:#566141;
-    --cor-botao: #CCE69A;
-    --cor-rodape: #566141;
     --fonte-principal:'Reggae One';
-    --titulo: #DEE0DA;
-    --rodape:  #566141;
-    --botao-texto: #636461;
+    --cor-de-fundo:#566141;
+    --cor-destaque: #CCE69A;
+    --branco: #ffffff;
+    --preto: #000000;
 }
 
 
@@ -20,7 +17,7 @@
 }
 
 body{
-    background-color: var(--rodape);
+    background-color: var(--cor-de-fundo);
 }
 
 
@@ -38,7 +35,6 @@ body{
 }
 
 .conteudo__principal{
-    background: var(--cor-de-fundo);
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -49,7 +45,7 @@ body{
     padding: 0.5em 0;
     font-size: 48px;
     font-weight: 400;
-    color: var(--titulo);
+    color: var(--branco);
     text-shadow: -3px 4px 4px rgba(0, 0, 0, 0.8);  
 }
 
@@ -84,8 +80,8 @@ body{
     margin-right: 25vw;
     padding: 1em;
     border-radius: 1.5em;
-    background-color: var(--cor-botao);
-    color: var(--botao-texto);
+    background-color: var(--cor-destaque);
+    color: var(--preto);
     border: var(--cor-botao) 1px solid;
     box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25); 
     transition-duration: 0.3s
