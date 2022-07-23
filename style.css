@@ -7,7 +7,8 @@
     --cor-rodape: #566141;
     --fonte-principal:'Reggae One';
     --titulo: #DEE0DA;
-
+    --rodape:  #566141;
+    --botao-texto: #636461;
 }
 
 
@@ -16,6 +17,10 @@
     padding: 0;
     box-sizing: border-box;
     font-family: var(--fonte-principal);
+}
+
+body{
+    background-color: var(--rodape);
 }
 
 
@@ -37,33 +42,57 @@
     align-items: center;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 .conteudo__titulo{
     text-align: center;
-    padding-top: 2em;
+    padding: 0.5em 0;
     font-size: 48px;
     font-weight: 400;
     color: var(--titulo);
-    text-shadow: -3px 4px 4px rgba(0, 0, 0, 0.8);
-    margin-bottom: 1em;
-    
+    text-shadow: -3px 4px 4px rgba(0, 0, 0, 0.8);  
 }
 
 .jogo{
     display: grid;
-    grid-template-columns: 20% 20% 20%;
-    grid-gap: 1em;
+    grid-template-columns: 10vw 10vw 10vw;
+    grid-gap: 0.5em;
+    margin-bottom: 2em;
 
 }
 
 .botoes{
     
     box-sizing: border-box;
-    border: 13px solid #DEE0DA;
+    border: 0.5em solid #DEE0DA;
     box-shadow: inset 21px 25px 19px 9px rgba(0, 0, 0, 0.25);
     border-radius: 31px; 
     background: #ACADA8;
-    height: 20vw;
-    width: 20vw;
-
+    height: 10vw;
+    width: 10vw;
 }
+
+.reiniciar{
+    align-self:flex-end;
+    margin-right: 25vw;
+    position: absolute;
+    top: 35vw;
+    padding: 1em;
+    border-radius: 1.5em;
+    background-color: var(--cor-botao);
+    color: var(--botao-texto);
+    border: var(--cor-botao) 1px solid; 
+}
+
+.rodape{
+    padding: 1em;
+    background-color: var(--rodape) ;
+    margin-top: auto;
+}
+
+.rodape__texto{
+    text-align: center;
+    color: var(--branco);
+    font-size: 1em;
+}
+
