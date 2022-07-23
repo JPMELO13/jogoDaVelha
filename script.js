@@ -28,6 +28,7 @@ window.onload = function() {
         if (this.value=="0"){
           this.value = parseInt(this.value)+1;
           this.innerText = "1";
+          this.style.border = "0.5em solid black"
           idMod=parseInt(this.id)
           if (idMod<3){
             velha[0][idMod] = this.value 

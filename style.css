@@ -55,11 +55,13 @@ body{
 
 .jogo{
     display: grid;
-    grid-template-columns: 10vw 10vw 10vw;
+    grid-template-columns: auto auto auto;
+    height:50vh;
+    width: 50vh;
     grid-gap: 0.5em;
-    margin-bottom: 2em;
 
 }
+
 
 .botoes{
     
@@ -68,20 +70,29 @@ body{
     box-shadow: inset 21px 25px 19px 9px rgba(0, 0, 0, 0.25);
     border-radius: 31px; 
     background: #ACADA8;
-    height: 10vw;
-    width: 10vw;
+
+    transition-duration: 0.3s
 }
+
+.botoes:hover{
+    border-color: #4CAF50; /* Green */
+}
+
 
 .reiniciar{
     align-self:flex-end;
     margin-right: 25vw;
-    position: absolute;
-    top: 35vw;
     padding: 1em;
     border-radius: 1.5em;
     background-color: var(--cor-botao);
     color: var(--botao-texto);
-    border: var(--cor-botao) 1px solid; 
+    border: var(--cor-botao) 1px solid;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25); 
+    transition-duration: 0.3s
+}
+.reiniciar:hover{
+    background-color: #4CAF50; /* Green */
+    color: white;
 }
 
 .rodape{
@@ -96,5 +107,19 @@ body{
     text-align: center;
     color: var(--branco);
     font-size: 1em;
+}
+
+@media(max-width:550px){
+    .jogo{
+        height:75vw;
+        width: 75vw;
+    }
+
+}
+@media(max-width:1400px){
+    .reiniciar{
+        margin-top: 1em;
+    }
+
 }
 
