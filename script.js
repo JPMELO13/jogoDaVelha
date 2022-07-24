@@ -48,9 +48,18 @@ function verificarVitoria(){
   
 
 }
+function mudarCor(destaque,secundaria,fundo,hover){
+  const value = getComputedStyle(document.documentElement).getPropertyValue('--cor-destaque'); 
+  console.log(value); 
+  document.documentElement.style.setProperty('--cor-destaque',destaque);
+  document.documentElement.style.setProperty('--cor-secundaria',secundaria);
+  document.documentElement.style.setProperty('--cor-de-fundo',fundo);
+  document.documentElement.style.setProperty('--hover-button',hover);
+}
 
 window.onload = function() {
     // vamos pegar todos os botoes:
+
     var botoes = document.querySelectorAll(".botoes");
     
     for(let i=0;i<botoes.length;i++) {
