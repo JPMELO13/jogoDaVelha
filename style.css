@@ -2,8 +2,9 @@
 
 :root{
     --fonte-principal:'Reggae One';
-    --cor-de-fundo:#566141;
+    --cor-secundaria:#566141;
     --cor-destaque: #CCE69A;
+    --cor-de-fundo:#ACADA8;
     --branco: #ffffff;
     --preto: #000000;
 }
@@ -23,15 +24,22 @@ body{
 
 
 .cabecalho{
-    padding: 2em;
+    padding: 1em;
     background: linear-gradient(90deg, #566141 15.13%, #CCE69A 72.09%, #566141 96.45%);
     filter: drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.25));
 }
 
 .cabecalho__titulo{
     color: var(--branco);
-    font-size: 48px;
+    font-size: 3em;
     font-weight: 400;
+    font-style: normal;
+    text-shadow: 
+               -3px -3px 3px var(--preto), 
+               -3px 3px 3px var(--preto),
+               3px -3px 3px var(--preto),
+               3px 3px 3px var(--preto);
+    
 }
 
 .conteudo__principal{
@@ -43,7 +51,7 @@ body{
 .conteudo__titulo{
     text-align: center;
     padding: 0.5em 0;
-    font-size: 48px;
+    font-size: 2em;
     font-weight: 400;
     color: var(--branco);
     text-shadow: -3px 4px 4px rgba(0, 0, 0, 0.8);  
@@ -54,7 +62,7 @@ body{
     grid-template-columns: auto auto auto;
     height:50vh;
     width: 50vh;
-    grid-gap: 0.5em;
+    grid-gap: 1vh;
 
 }
 
@@ -64,14 +72,15 @@ body{
     box-sizing: border-box;
     border: 0.5em solid #DEE0DA;
     box-shadow: inset 21px 25px 19px 9px rgba(0, 0, 0, 0.25);
-    border-radius: 31px; 
-    background: #ACADA8;
-
+    border-radius: 1.5em; 
+    background: var(--cor-de-fundo);
+    width: 16vh;
+    height: 16vh;
     transition-duration: 0.3s
 }
 
 .botoes:hover{
-    border-color: #4CAF50; /* Green */
+    border-color: #4CAF50;
 }
 
 
@@ -82,8 +91,8 @@ body{
     border-radius: 1.5em;
     background-color: var(--cor-destaque);
     color: var(--preto);
-    border: var(--cor-botao) 1px solid;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25); 
+    border: var(--branco) 1px solid;
+    box-shadow: inset 21px 25px 19px 9px rgba(0, 0, 0, 0.25); 
     transition-duration: 0.3s
 }
 .reiniciar:hover{
@@ -94,21 +103,28 @@ body{
 .rodape{
     bottom: 0;
     left: 0;
-    height: 40px;
     position: fixed;
     width: 100vw;
+    background-color: var(--cor-secundaria);
+
 }
 
 .rodape__texto{
     text-align: center;
     color: var(--branco);
     font-size: 1em;
+    margin:0.5em;
 }
 
 @media(max-width:550px){
     .jogo{
-        height:75vw;
-        width: 75vw;
+        height:74vw;
+        width: 74vw;
+        grid-gap: 1vw;
+    }
+    .botoes{
+        width: 24vw;
+        height: 24vw;
     }
 
 }
@@ -116,6 +132,8 @@ body{
     .reiniciar{
         margin-top: 1em;
     }
+
+    
 
 }
 
