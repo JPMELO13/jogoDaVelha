@@ -82,6 +82,10 @@ body{
 #cor3{
     background: linear-gradient(117.85deg, #2B2C30 50%, #8C8C8C 115.94%);
 }
+
+.mudar__cor:hover{
+    border: var(--branco) 5px solid;
+}
 .conteudo__principal{
     
     display: flex;
@@ -111,12 +115,13 @@ body{
 .botoes{
     
     box-sizing: border-box;
-    border: 0.5em solid var(--branco);
+    /* border: 0.5em solid var(--branco); */
     box-shadow: inset 21px 25px 19px 9px rgba(0, 0, 0, 0.25);
-    border-radius: 1.5em; 
+    /* border-radius: 1.5em;  */
     background: var(--cor-de-fundo);
     width: 16vh;
     height: 16vh;
+    font-size: 10vh;
     
 }
 

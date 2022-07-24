@@ -71,8 +71,14 @@ window.onload = function() {
       botao.addEventListener("click", function(){
         if (this.value=="0" && ganhador==0){
           this.value = parseInt(this.value)+ jogador;
-          this.innerText = jogador;
-          this.style.border = "0.5em solid black"
+          if (jogador ==1){
+            this.innerHTML = "&#10006"
+          }else if(jogador ==-1){
+            this.innerHTML = "&#9678"
+          }
+
+          
+          // this.style.border = "0.5em solid black"
           idMod=parseInt(this.id)
           if (idMod<3){
             velha[0][idMod] = parseInt(this.value)
