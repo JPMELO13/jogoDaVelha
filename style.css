@@ -5,7 +5,7 @@
     --cor-secundaria:#566141;
     --cor-destaque: #CCE69A;
     --cor-de-fundo:#ACADA8;
-    --hover-button:#2F4800;
+    --hover-button:#607831;
     --branco: #ffffff;
     --preto: #000000;
 }
@@ -115,13 +115,13 @@ body{
 .botoes{
     
     box-sizing: border-box;
-    /* border: 0.5em solid var(--branco); */
+    border: 0.8vh solid var(--branco);
     box-shadow: inset 21px 25px 19px 9px rgba(0, 0, 0, 0.25);
-    /* border-radius: 1.5em;  */
+    border-radius: 10px ;
     background: var(--cor-de-fundo);
     width: 16vh;
     height: 16vh;
-    font-size: 10vh;
+    font-size: 8vh;
     
 }
 
@@ -171,6 +171,8 @@ body{
     .botoes{
         width: 24vw;
         height: 24vw;
+        border: 1.2vw solid var(--branco);
+        font-size: 12vw;
     }
     .botoes__cor{
         flex-direction: column;
