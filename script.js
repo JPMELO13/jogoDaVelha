@@ -116,7 +116,6 @@ function destacarVitoria(id1, id2, id3) {
 }
 
 function cliqueBotao(obj){
-  console.log("teste aqui")
   if (obj.target.value == "0" && ganhador == 0) {
     obj.target.classList.remove("selecionavel")
     obj.target.value = parseInt(obj.target.value) + jogador;
