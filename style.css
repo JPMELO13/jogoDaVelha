@@ -127,8 +127,12 @@ body{
     
 }
 
-.botoes:hover{
+.selecionavel:hover{
     border-color: var(--cor-hover-botao);
+}
+
+.destaque__vitoria{
+    border: 0.9vh solid var(--cor-destaque) !important;
 }
 
 
