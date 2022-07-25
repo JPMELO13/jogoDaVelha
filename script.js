@@ -135,9 +135,6 @@ function cliqueBotao(obj){
 window.onload = function () {
   document.getElementById("reiniciar__botao").addEventListener("click", reiniciar)
 
-  // selecionar todos os botões do jogo:
-  var botoes = document.querySelectorAll(".botoes");
-
   //chamar após preenchimento de nomes
   iniciar()
 
