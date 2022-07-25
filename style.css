@@ -5,7 +5,7 @@
     --cor-secundaria:#566141;
     --cor-destaque: #CCE69A;
     --cor-de-fundo:#ACADA8;
-    --hover-button:#607831;
+    --cor-hover-botao:#607831;
     --branco: #ffffff;
     --preto: #000000;
 }
@@ -122,15 +122,17 @@ body{
     width: 16vh;
     height: 16vh;
     font-size: 8vh;
+    color:var(--branco);
+    text-shadow: -3px 4px 4px rgba(0, 0, 0, 0.8);
     
 }
 
 .botoes:hover{
-    border-color: var(--hover-button);
+    border-color: var(--cor-hover-botao);
 }
 
 
-.reiniciar{
+#reiniciar__botao{
     align-self:flex-end;
     padding: 1em;
     border-radius: 1.5em;
@@ -141,8 +143,8 @@ body{
     margin-top: 1em;
     
 }
-.reiniciar:hover{
-    background-color: var(--hover-button);
+#reiniciar__botao:hover{
+    background-color: var(--cor-hover-botao);
     color: white;
     box-shadow: none; 
 }
@@ -182,7 +184,7 @@ body{
         width: 8vw;
         height: 8vw;
     }
-    .reiniciar{
+    #reiniciar__botao{
         margin-left: 0;
     }
 

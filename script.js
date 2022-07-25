@@ -5,8 +5,6 @@ var velha = [[0,0,0],
 var jogador = 1;
 var ganhador = 0;
 
-// Sera executado apos o carregamento da pagina
-
 function mudarJogador(){
   jogador = jogador * -1;
 }
@@ -18,6 +16,7 @@ function verificarVitoria(){
   else if((velha[0][0] + velha[1][1] + velha[2][2]==-3)||(velha[0][2] + velha[1][1] + velha[2][0]==-3)){
     ganhador = -1;
   }
+
   else{
     for(let cont=0; cont<3; cont++){
 
@@ -44,30 +43,45 @@ function verificarVitoria(){
     document.getElementById("titulo").innerText = "GANHADOR -1";
     console.log('ganhou -1')
   }
-
-  
-
 }
+
 function mudarCor(destaque,secundaria,fundo,hover){
   const value = getComputedStyle(document.documentElement).getPropertyValue('--cor-destaque'); 
   console.log(value); 
   document.documentElement.style.setProperty('--cor-destaque',destaque);
   document.documentElement.style.setProperty('--cor-secundaria',secundaria);
   document.documentElement.style.setProperty('--cor-de-fundo',fundo);
-  document.documentElement.style.setProperty('--hover-button',hover);
+  document.documentElement.style.setProperty('--cor-hover-botao',hover);
 }
 
-window.onload = function() {
-    // vamos pegar todos os botoes:
+function reiniciar(){
+  var botoes1 = document.querySelectorAll(".botoes");
+  for(let i=0;i<3;i++){
+    for(let j=0;j<3;j++){
+      velha[i][j]=0;
+      botoes1[3*i+j].innerHTML = "";
+      botoes1[3*i+j].value = "0";
+      console.log( botoes1[3*i+j]);
+    }
+  }
+  ganhador = 0;
+  jogador = 1;
+  document.getElementById("titulo").innerText = "Vez do Player #";
+}
+  
 
+window.onload = function() {
+
+
+    document.getElementById("reiniciar__botao").addEventListener("click",reiniciar)
+    // selecionar todos os botões do jogo:
     var botoes = document.querySelectorAll(".botoes");
     
     for(let i=0;i<botoes.length;i++) {
       
       var botao = botoes[i];
-      
-      // O jeito correto e padronizado de incluir eventos no ECMAScript
-      // (Javascript) eh com addEventListener:
+
+      // addEventListener vai "aguardar" o click(gatilho) do usuario para disparar a função:
       botao.addEventListener("click", function(){
         if (this.value=="0" && ganhador==0){
           this.value = parseInt(this.value)+ jogador;
@@ -75,20 +89,11 @@ window.onload = function() {
             this.innerHTML = "&#10006"
           }else if(jogador ==-1){
             this.innerHTML = "&#9678"
-          }
-
-          
-          // this.style.border = "0.5em solid black"
-          idMod=parseInt(this.id)
-          if (idMod<3){
-            velha[0][idMod] = parseInt(this.value)
-          }
-          else if (idMod<6){
-            velha[1][idMod-3] = parseInt(this.value) 
-          }
-          else{
-            velha[2][idMod-6] = parseInt(this.value) 
-          }
+          }          
+          // MELHORAR -> this.style.border = "0.5em solid black"
+          idMod=parseInt(this.id.substr(-1))
+          // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
+          velha[Math.floor(idMod/3)][idMod%3] = parseInt(this.value)
         }
         console.log(velha);
         mudarJogador();
