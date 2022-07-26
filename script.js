@@ -94,6 +94,7 @@ function terminar() {
 }
 
 function reiniciar() {
+  alert("test")
   let botoes = document.querySelectorAll(".botoes");
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
@@ -120,9 +121,9 @@ function cliqueBotao(obj){
     obj.target.classList.remove("selecionavel")
     obj.target.value = parseInt(obj.target.value) + jogador;
     if (jogador == 1) {
-      obj.target.innerHTML = "&#10006"
+      obj.target.innerHTML = "&#10005"
     } else if (jogador == -1) {
-      obj.target.innerHTML = "&#9678"
+      obj.target.innerHTML = "&#9675"
     }
     idMod = parseInt(obj.target.id.substr(-1))
     // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão

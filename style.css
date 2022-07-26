@@ -24,12 +24,14 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
     
 }
 
 
 
 .cabecalho{
+    z-index: 2;
     width: 100vw;
     padding: 1em;
     background: linear-gradient(90deg, var(--cor-secundaria) 15.13%, var(--cor-destaque) 72.09%, var(--cor-secundaria) 96.45%);
@@ -47,7 +49,7 @@ body{
 .cabecalho__titulo{
     
     color: var(--branco);
-    font-size: 3em;
+    font-size: 2em;
     font-weight: 400;
     font-style: normal;
     text-shadow: 
@@ -70,7 +72,7 @@ body{
     width: 4vh;
     height: 4vh;
     border: var(--branco) 1px solid;
-    margin: 2px;
+    margin: 1px;
 }
 
 #cor1{
@@ -95,7 +97,7 @@ body{
 .conteudo__titulo{
     text-align: center;
     padding: 0.5em 0;
-    font-size: 2em;
+    font-size: 1.5em;
     font-weight: 400;
     color: var(--branco);
     text-shadow: -3px 4px 4px rgba(0, 0, 0, 0.8);  
@@ -135,25 +137,64 @@ body{
     border: 0.9vh solid var(--cor-destaque) !important;
 }
 
-
-#reiniciar__botao{
-    align-self:flex-end;
+.botao{
     padding: 1em;
     border-radius: 1.5em;
     background-color: var(--cor-destaque);
     color: var(--branco);
     border: var(--branco) 1px solid;
     box-shadow: inset 21px 25px 19px 9px var(--cor-secundaria); 
-    margin-top: 1em;
+    align-self:flex-end;
     
+    margin-top: 1em;
 }
-#reiniciar__botao:hover{
+.botao:hover{
     background-color: var(--cor-hover-botao);
     color: white;
-    box-shadow: none; 
+    box-shadow: none;
+}
+
+.form__players{
+    display:flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.player__field{
+    padding: 10px 0px;	
+	position: relative;	
+}
+.player__icon{
+    position: absolute;
+	top: 38px;
+    left: 5px;
+	color: var(--branco);
+}
+.player_input{
+    border: none;
+	border-bottom: 2px solid var(--branco);
+	background: none;
+	padding: 10px;
+	padding-left: 24px;
+	width: 75%;
+	transition: .2s;
+    margin-top: 20px;
+    
+}
+
+.player_input:active,
+.player_input:focus,
+.player_input:hover {
+    
+	outline: none;
+	border-bottom-color: var(--cor-hover-botao);
+}
+.player_input::placeholder{
+    color: var(--branco);
 }
 
 .rodape{
+    z-index: 2;
     bottom: 0;
     width: 100vw;
     position: fixed;
@@ -168,6 +209,31 @@ body{
     margin:0.5em;
 }
 
+.modal{
+    display: flex;
+    
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 1;
+    left:0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background: linear-gradient(90deg, var(--cor-secundaria) 15.13%, var(--cor-destaque) 72.09%, var(--cor-secundaria) 96.45%);
+    filter: drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.25));
+}
+
+
+
+
+
+
+
+
+
+
 @media(max-width:550px){
     .jogo{
         height:74vw;
@@ -180,18 +246,22 @@ body{
         border: 1.2vw solid var(--branco);
         font-size: 12vw;
     }
-    .botoes__cor{
+    /* .botoes__cor{
         flex-direction: column;
-    }
+    } */
     .mudar__cor{
 
-        width: 8vw;
-        height: 8vw;
+        width: 7vw;
+        height: 7vw;
     }
     #reiniciar__botao{
         margin-left: 0;
     }
+    .cabecalho{
+        padding: 1em 0;
+    }
 
 }
+
 
 
