@@ -2,10 +2,10 @@
 
 :root{
     --fonte-principal:'Reggae One';
-    --cor-secundaria:#566141;
-    --cor-destaque: #CCE69A;
-    --cor-de-fundo:#ACADA8;
-    --cor-hover-botao:#607831;
+    --cor-secundaria:#CD4978;
+    --cor-destaque: #FA8B3B;
+    --cor-de-fundo:#2B2C30;
+    --cor-hover-botao:#FF005B;
     --branco: #ffffff;
     --preto: #000000;
 }
