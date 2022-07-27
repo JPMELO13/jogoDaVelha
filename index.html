@@ -14,16 +14,16 @@
     <!-- modal insercao players -->
 
             <div class="modal">
-                <form class="form__players">
+                <form class="form__players" id="form_players">
                     <div class="player__field">
                         <span class="player__icon">&#10005 </span>
-                        <input type="text" class="player_input" placeholder="Player1">
+                        <input type="text" class="player__input" name="player1" placeholder="Player1">
                     </div>
                     <div class="player__field">
                         <span class="player__icon">&#9675</span>
-                        <input type="text" class="player_input" placeholder="Player2">
+                        <input type="text" class="player__input" name="player2" placeholder="Player2">
                     </div>
-                    <button class="botao">Jogar</button>				
+                    <button class="botao" type="submit">Jogar</button>				
                 </form>
             </div>
 
@@ -40,7 +40,7 @@
         </div>
     </header>
     <section class="conteudo__principal">
-        <h2 class="conteudo__titulo" id="titulo">Vez do Player #</h2>
+        <h2 class="conteudo__titulo" id="titulo">Vez de </h2>
         <div class="jogo">
             <button class="botoes" id="b0" value="0"></button>
             <button class="botoes" id="b1" value="0"></button>

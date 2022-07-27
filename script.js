@@ -4,9 +4,19 @@ var velha = [[0, 0, 0],
 
 var jogador = 1;
 var ganhador = 0;
+var player1 = "Player1"
+var player2 = "Player2"
 
 function mudarJogador() {
   jogador = jogador * -1;
+  if (jogador != 1){
+    document.getElementById("titulo").innerHTML="Vez de "+player2
+  }
+  else{
+    console.log("entrou aqui")
+    document.getElementById("titulo").innerHTML="Vez de "+player1
+  }
+  
 }
 
 function verificarVitoria() {
@@ -57,11 +67,11 @@ function verificarVitoria() {
     destacarVitoria(2, 4, 6);
   }
   if (ganhador == 1) {
-    document.getElementById("titulo").innerText = "GANHADOR 1";
+    document.getElementById("titulo").innerText = "GANHADOR: " + player1;
     terminar();
   }
   else if (ganhador == -1) {
-    document.getElementById("titulo").innerText = "GANHADOR -1";
+    document.getElementById("titulo").innerText = "GANHADOR: " + player2;
     terminar();
   }
 }
@@ -81,6 +91,7 @@ function iniciar() {
       botoes[3 * i + j].addEventListener("click", cliqueBotao);
     }
   }
+  document.getElementById("titulo").innerHTML="Vez de "+player1
 }
 
 function terminar() {
@@ -94,7 +105,6 @@ function terminar() {
 }
 
 function reiniciar() {
-  alert("test")
   let botoes = document.querySelectorAll(".botoes");
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
@@ -106,7 +116,6 @@ function reiniciar() {
   }
   ganhador = 0;
   jogador = 1;
-  document.getElementById("titulo").innerText = "Vez do Player #";
   iniciar();
 }
 
@@ -133,11 +142,39 @@ function cliqueBotao(obj){
   }
 }
 
+function verificarNomesIguais(nome1, nome2){
+  let resultado = 1
+  if (nome1==nome2 && nome1!=""){
+    resultado =0;
+  }
+  return resultado;
+}
+
 window.onload = function () {
   document.getElementById("reiniciar__botao").addEventListener("click", reiniciar)
 
+  const form = document.getElementById('form_players')
+  form.addEventListener('submit', e => {
+    e.preventDefault()
+    if(verificarNomesIguais(form.elements[0].value,form.elements[1].value)){
+      if(form.elements[0].value!=""){
+        player1 = form.elements[0].value
+      }
+      if(form.elements[1].value!=""){
+        player2 = form.elements[1].value
+      }
+
+      document.getElementsByClassName("modal")[0].classList.add("modal__conlcuido");
+      iniciar()
+
+
+    }
+        
+    
+  })
+
   //chamar após preenchimento de nomes
-  iniciar()
+  
 
   
 };

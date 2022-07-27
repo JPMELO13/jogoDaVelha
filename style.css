@@ -170,7 +170,7 @@ body{
     left: 5px;
 	color: var(--branco);
 }
-.player_input{
+.player__input{
     border: none;
 	border-bottom: 2px solid var(--branco);
 	background: none;
@@ -179,17 +179,18 @@ body{
 	width: 75%;
 	transition: .2s;
     margin-top: 20px;
+    color: var(--branco);
     
 }
 
-.player_input:active,
-.player_input:focus,
-.player_input:hover {
+.player__input:active,
+.player__input:focus,
+.player__input:hover {
     
 	outline: none;
 	border-bottom-color: var(--cor-hover-botao);
 }
-.player_input::placeholder{
+.player__input::placeholder{
     color: var(--branco);
 }
 
@@ -223,6 +224,10 @@ body{
     overflow: auto;
     background: linear-gradient(90deg, var(--cor-secundaria) 15.13%, var(--cor-destaque) 72.09%, var(--cor-secundaria) 96.45%);
     filter: drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.25));
+}
+
+.modal__conlcuido{
+    display:none !important;
 }
 
 
