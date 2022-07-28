@@ -10,7 +10,6 @@
     --preto: #000000;
 }
 
-
 *{
     margin: 0;
     padding: 0;
@@ -27,8 +26,6 @@ body{
     position: relative;
     
 }
-
-
 
 .cabecalho{
     z-index: 2;
@@ -60,8 +57,6 @@ body{
     
 }
 
-
-
 .botoes__cor{
     display: flex;
     align-self:flex-end;
@@ -78,9 +73,11 @@ body{
 #cor1{
     background: linear-gradient(117.85deg, #566141 50%, #E3FFAC 115.94%);
 }
+
 #cor2{
     background: linear-gradient(117.85deg, #CD4978 50%, #FA8B3B 115.94%);
 }
+
 #cor3{
     background: linear-gradient(117.85deg, #2B2C30 50%, #8C8C8C 115.94%);
 }
@@ -88,12 +85,14 @@ body{
 .mudar__cor:hover{
     border: var(--branco) 5px solid;
 }
+
 .conteudo__principal{
     
     display: flex;
     flex-direction: column;
 
 }
+
 .conteudo__titulo{
     text-align: center;
     padding: 0.5em 0;
@@ -112,7 +111,6 @@ body{
     grid-gap: 1vh;
 
 }
-
 
 .botoes{
     
@@ -137,6 +135,10 @@ body{
     border: 0.9vh solid var(--cor-destaque) !important;
 }
 
+.destaque_titulo{
+    color:var(--cor-destaque)
+}
+
 .botao{
     padding: 1em;
     border-radius: 1.5em;
@@ -148,6 +150,7 @@ body{
     
     margin-top: 1em;
 }
+
 .botao:hover{
     background-color: var(--cor-hover-botao);
     color: white;
@@ -164,12 +167,14 @@ body{
     padding: 10px 0px;	
 	position: relative;	
 }
+
 .player__icon{
     position: absolute;
 	top: 38px;
     left: 5px;
 	color: var(--branco);
 }
+
 .player__input{
     border: none;
 	border-bottom: 2px solid var(--branco);
@@ -190,6 +195,7 @@ body{
 	outline: none;
 	border-bottom-color: var(--cor-hover-botao);
 }
+
 .player__input::placeholder{
     color: var(--branco);
 }
@@ -231,42 +237,36 @@ body{
 }
 
 
-
-
-
-
-
-
-
-
 @media(max-width:550px){
+
     .jogo{
         height:74vw;
         width: 74vw;
         grid-gap: 1vw;
     }
+
     .botoes{
         width: 24vw;
         height: 24vw;
         border: 1.2vw solid var(--branco);
         font-size: 12vw;
     }
+
     /* .botoes__cor{
         flex-direction: column;
     } */
+
     .mudar__cor{
 
         width: 7vw;
         height: 7vw;
     }
+
     #reiniciar__botao{
         margin-left: 0;
     }
+
     .cabecalho{
         padding: 1em 0;
     }
-
 }
-
-
-
