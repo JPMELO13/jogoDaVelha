@@ -26,6 +26,9 @@ body{
     position: relative;
     
 }
+a{
+    text-decoration: none;
+}
 
 .cabecalho{
     z-index: 2;
