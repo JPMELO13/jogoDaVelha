@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
 :root{
     --fonte-principal:'Orbitron';
@@ -50,7 +50,7 @@ a{
     
     color: var(--branco);
     font-size: 2em;
-    font-weight: 400;
+    font-weight: 700;
     font-style: normal;
     text-shadow: 
                -3px -3px 3px var(--preto), 
