@@ -2,7 +2,7 @@ var velha = [[0, 0, 0],
              [0, 0, 0],
              [0, 0, 0]]
 var jogada = 0;
-var jogador = 1;
+var jogador = 0;
 var ganhador = 0;
 var player1 = "Player1"
 var player2 = "Player2"
@@ -18,6 +18,7 @@ function mudarJogador() {
   }
   jogada ++;
 }
+
 function mudarTema(destaque, secundaria, fundo, hover) {
   //passando codigos hex das cores por parâmetro é alterada no arquivo css
   document.documentElement.style.setProperty('--cor-destaque', destaque);
@@ -25,6 +26,7 @@ function mudarTema(destaque, secundaria, fundo, hover) {
   document.documentElement.style.setProperty('--cor-de-fundo', fundo);
   document.documentElement.style.setProperty('--cor-hover-botao', hover);
 }
+
 function verificarNomesIguais(nome1, nome2){
   let resultado = 1
   if (nome1==nome2 && nome1!=""){
@@ -32,6 +34,19 @@ function verificarNomesIguais(nome1, nome2){
   }
   return resultado;
 }
+
+function sorteiaPrimeiroJogador(){
+  let x = Math.random();
+  if(x>0.5){
+    jogador = -1;
+    document.getElementById("titulo").innerHTML="Vez de "+player2
+  }
+  else{
+    jogador = 1;
+    document.getElementById("titulo").innerHTML="Vez de "+player1
+  }
+}
+
 function iniciar() {
   let botoes = document.querySelectorAll(".botoes");
   //2 laços for para percorrer matriz 3x3 para aplicar a classe selecionavel e "escutar" cliques de todos botões
@@ -41,8 +56,9 @@ function iniciar() {
       botoes[3 * i + j].addEventListener("click", cliqueBotao);
     }
   }
-  document.getElementById("titulo").innerHTML="Vez de "+player1
+  sorteiaPrimeiroJogador();
 }
+
 function cliqueBotao(obj){
   if (obj.target.value == "0" && ganhador == 0) {
     obj.target.classList.remove("selecionavel")
@@ -50,7 +66,7 @@ function cliqueBotao(obj){
     if (jogador == 1) {
       obj.target.innerHTML = "&#10005"
     } else if (jogador == -1) {
-      obj.target.innerHTML = "&#9675"
+      obj.target.innerHTML = "&#9711"
     }
     idMod = parseInt(obj.target.id.substr(-1))
     // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
@@ -59,6 +75,7 @@ function cliqueBotao(obj){
     
   }
 }
+
 function verificarVitoria2(id){
   let somaLinha=0;
   let somaColuna=0;
@@ -109,6 +126,7 @@ function verificarVitoria2(id){
     mudarJogador();
   }
 }
+
 function terminar() {
   let botoes = document.querySelectorAll(".botoes");
   for (let i = 0; i < 3; i++) {
@@ -122,6 +140,7 @@ function terminar() {
   }
   document.getElementById("titulo").classList.add("destaque_titulo");
 }
+
 function reiniciar() {
   let botoes = document.querySelectorAll(".botoes");
   for (let i = 0; i < 3; i++) {
@@ -134,22 +153,24 @@ function reiniciar() {
     }
   }
   ganhador = 0;
-  jogador = 1;
   jogada = 0;
   iniciar();
 }
+
 function destacarLinha(id) {
   let inicio = (Math.floor(id / 3))*3
   document.getElementById(('b' + inicio)).classList.add("destaque__vitoria");
   document.getElementById(('b' + (inicio+1))).classList.add("destaque__vitoria");
   document.getElementById(('b' + (inicio+2))).classList.add("destaque__vitoria");
 }
+
 function destacarColuna(id) {
   let inicio = id%3
   document.getElementById(('b' + inicio)).classList.add("destaque__vitoria");
   document.getElementById(('b' + (inicio+3))).classList.add("destaque__vitoria");
   document.getElementById(('b' + (inicio+6))).classList.add("destaque__vitoria");
 }
+
 function destacarDiagonal(diag) {
   document.getElementById(('b4')).classList.add("destaque__vitoria");
   document.getElementById(('b' + (diag*2))).classList.add("destaque__vitoria");

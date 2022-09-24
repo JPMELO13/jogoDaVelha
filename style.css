@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Reggae+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
 
 :root{
-    --fonte-principal:'Reggae One';
+    --fonte-principal:'Orbitron';
     --cor-secundaria:#CD4978;
     --cor-destaque: #FA8B3B;
     --cor-de-fundo:#2B2C30;
@@ -14,7 +14,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: var(--fonte-principal);
+    font-family: var(--fonte-principal) , cursive;
     transition-duration: 0.3s
 }
 
