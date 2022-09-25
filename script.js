@@ -7,18 +7,6 @@ var ganhador = 0;
 var player1 = "Player1"
 var player2 = "Player2"
 
-function mudarJogador() {
-  // multiplicação por -1 faz o jogador "atual" alternar em -1 e 1. Função altera exibição do turno
-  jogador = jogador * -1;
-  if (jogador == 1){
-    document.getElementById("titulo").innerHTML="Vez de "+player1
-  }
-  else{
-    document.getElementById("titulo").innerHTML="Vez de "+player2
-  }
-  jogada ++;
-}
-
 function mudarTema(destaque, secundaria, fundo, hover) {
   //passando codigos hex das cores por parâmetro é alterada no arquivo css
   document.documentElement.style.setProperty('--cor-destaque', destaque);
@@ -47,6 +35,18 @@ function sorteiaPrimeiroJogador(){
   }
 }
 
+function mudarJogador() {
+  // multiplicação por -1 faz o jogador "atual" alternar em -1 e 1. Função altera exibição do turno
+  jogador = jogador * -1;
+  if (jogador == 1){
+    document.getElementById("titulo").innerHTML="Vez de "+player1
+  }
+  else{
+    document.getElementById("titulo").innerHTML="Vez de "+player2
+  }
+  jogada ++;
+}
+
 function iniciar() {
   let botoes = document.querySelectorAll(".botoes");
   //2 laços for para percorrer matriz 3x3 para aplicar a classe selecionavel e "escutar" cliques de todos botões
@@ -71,12 +71,12 @@ function cliqueBotao(obj){
     idMod = parseInt(obj.target.id.substr(-1))
     // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
     velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.target.value)
-    verificarVitoria2(idMod);
+    verificarVitoria(idMod);
     
   }
 }
 
-function verificarVitoria2(id){
+function verificarVitoria(id){
   let somaLinha=0;
   let somaColuna=0;
   let somaDiagonal0=0;
@@ -127,6 +127,26 @@ function verificarVitoria2(id){
   }
 }
 
+function destacarLinha(id) {
+  let inicio = (Math.floor(id / 3))*3
+  document.getElementById(('b' + inicio)).classList.add("destaque__vitoria");
+  document.getElementById(('b' + (inicio+1))).classList.add("destaque__vitoria");
+  document.getElementById(('b' + (inicio+2))).classList.add("destaque__vitoria");
+}
+
+function destacarColuna(id) {
+  let inicio = id%3
+  document.getElementById(('b' + inicio)).classList.add("destaque__vitoria");
+  document.getElementById(('b' + (inicio+3))).classList.add("destaque__vitoria");
+  document.getElementById(('b' + (inicio+6))).classList.add("destaque__vitoria");
+}
+
+function destacarDiagonal(diag) {
+  document.getElementById(('b4')).classList.add("destaque__vitoria");
+  document.getElementById(('b' + (diag*2))).classList.add("destaque__vitoria");
+  document.getElementById(('b' + (8-(diag*2)))).classList.add("destaque__vitoria");
+}
+
 function terminar() {
   let botoes = document.querySelectorAll(".botoes");
   for (let i = 0; i < 3; i++) {
@@ -155,26 +175,6 @@ function reiniciar() {
   ganhador = 0;
   jogada = 0;
   iniciar();
-}
-
-function destacarLinha(id) {
-  let inicio = (Math.floor(id / 3))*3
-  document.getElementById(('b' + inicio)).classList.add("destaque__vitoria");
-  document.getElementById(('b' + (inicio+1))).classList.add("destaque__vitoria");
-  document.getElementById(('b' + (inicio+2))).classList.add("destaque__vitoria");
-}
-
-function destacarColuna(id) {
-  let inicio = id%3
-  document.getElementById(('b' + inicio)).classList.add("destaque__vitoria");
-  document.getElementById(('b' + (inicio+3))).classList.add("destaque__vitoria");
-  document.getElementById(('b' + (inicio+6))).classList.add("destaque__vitoria");
-}
-
-function destacarDiagonal(diag) {
-  document.getElementById(('b4')).classList.add("destaque__vitoria");
-  document.getElementById(('b' + (diag*2))).classList.add("destaque__vitoria");
-  document.getElementById(('b' + (8-(diag*2)))).classList.add("destaque__vitoria");
 }
 
 window.onload = function () {
