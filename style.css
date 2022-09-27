@@ -150,7 +150,7 @@ a{
     border: var(--branco) 1px solid;
     box-shadow: inset 21px 25px 19px 9px var(--cor-secundaria); 
     align-self:flex-end;
-    
+    font-size: 1em;
     margin-top: 1em;
 }
 
@@ -174,7 +174,7 @@ a{
 .player__icon{
     position: absolute;
 	top: 38px;
-    left: 5px;
+
 	color: var(--branco);
 }
 
@@ -183,12 +183,12 @@ a{
 	border-bottom: 2px solid var(--branco);
 	background: none;
 	padding: 10px;
-	padding-left: 24px;
+	padding-left: 30px;
 	width: 75%;
 	transition: .2s;
     margin-top: 20px;
     color: var(--branco);
-    
+    font-size: 1em;
 }
 
 .player__input:active,
@@ -239,6 +239,47 @@ a{
     display:none !important;
 }
 
+.switch-field {
+    margin-bottom: 5vh;
+	display: flex;
+	overflow: hidden;
+}
+
+.switch-field input {
+	position: absolute !important;
+	clip: rect(0, 0, 0, 0);
+	height: 1px;
+	width: 1px;
+	border: 0;
+	overflow: hidden;
+}
+
+.switch-field label {
+	background-color: transparent;
+	color: var(--branco);
+	text-align: center;
+	padding: 1em;
+	border: 1px solid var(--branco);
+    
+}
+
+.switch-field label:hover {
+	cursor: pointer;
+}
+
+.switch-field input:checked + label {
+	background-color: var(--cor-destaque);
+	box-shadow: inset 21px 15px 19px 9px var(--cor-secundaria); 
+}
+
+.switch-field label:first-of-type {
+	border-radius: 1.5em 0 0 1.5em;
+}
+
+.switch-field label:last-of-type {
+	border-radius: 0 1.5em 1.5em 0;
+}
+
 
 @media(max-width:550px){
 
@@ -271,5 +312,11 @@ a{
 
     .cabecalho{
         padding: 1em 0;
+    }
+    .cabecalho__titulo{
+        font-size: 1.4em;
+    }
+    .switch-field {
+        margin-bottom: 0;
     }
 }

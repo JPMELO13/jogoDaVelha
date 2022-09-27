@@ -6,6 +6,7 @@ var jogador = 0;
 var ganhador = 0;
 var player1 = "Player1"
 var player2 = "Player2"
+var modo = ""
 
 function mudarTema(destaque, secundaria, fundo, hover) {
   //passando codigos hex das cores por parâmetro é alterada no arquivo css
@@ -15,6 +16,7 @@ function mudarTema(destaque, secundaria, fundo, hover) {
   document.documentElement.style.setProperty('--cor-hover-botao', hover);
 }
 
+//EXPOR ERROS AO USUARIO
 function verificarNomesIguais(nome1, nome2){
   let resultado = 1
   if (nome1==nome2 && nome1!=""){
@@ -22,6 +24,7 @@ function verificarNomesIguais(nome1, nome2){
   }
   return resultado;
 }
+
 
 function sorteiaPrimeiroJogador(){
   let x = Math.random();
@@ -36,6 +39,11 @@ function sorteiaPrimeiroJogador(){
 }
 
 function mudarJogador() {
+  console.log("fim da jogada:"+jogada);
+
+
+  
+
   // multiplicação por -1 faz o jogador "atual" alternar em -1 e 1. Função altera exibição do turno
   jogador = jogador * -1;
   if (jogador == 1){
@@ -45,18 +53,58 @@ function mudarJogador() {
     document.getElementById("titulo").innerHTML="Vez de "+player2
   }
   jogada ++;
+
+  if (modo=="single"){
+    if (jogador==-1){
+      removeListenerBotoes();
+      botJogar();
+    }
+    else{
+      addListenerBotoes0();
+    }
+
+  }
+
 }
 
 function iniciar() {
+
+  let botoes = document.querySelectorAll(".botoes");
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      velha[i][j] = 0;
+      botoes[3 * i + j].innerHTML = "";
+      botoes[3 * i + j].value = "0";
+      botoes[3 * i + j].classList.remove("destaque__vitoria")
+      document.getElementById("titulo").classList.remove("destaque_titulo");
+    }
+  }
+  ganhador = 0;
+  jogada = 0;
+
+  sorteiaPrimeiroJogador();
+  console.log(jogador);
+
+  if ((jogador == -1)&&(modo == "single")){
+    botJogar();
+  }
+  else{
+    addListenerBotoes0();
+  }
+}
+
+function addListenerBotoes0(){
   let botoes = document.querySelectorAll(".botoes");
   //2 laços for para percorrer matriz 3x3 para aplicar a classe selecionavel e "escutar" cliques de todos botões
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      botoes[3 * i + j].classList.add("selecionavel")
-      botoes[3 * i + j].addEventListener("click", cliqueBotao);
+      if(velha[i][j]==0){
+        botoes[3 * i + j].classList.add("selecionavel");
+        botoes[3 * i + j].addEventListener("click", cliqueBotao);
+      }
+      
     }
   }
-  sorteiaPrimeiroJogador();
 }
 
 function cliqueBotao(obj){
@@ -74,6 +122,30 @@ function cliqueBotao(obj){
     verificarVitoria(idMod);
     
   }
+}
+
+function botJogar(){
+  let botaoEscolhido;
+  do{
+    botaoEscolhido = Math.floor(Math.random() * 9);
+  }while (velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido%3] != 0)
+
+  let botoes = document.querySelectorAll(".botoes");
+  let obj=botoes[botaoEscolhido];
+  
+  if (obj.value == "0" && ganhador == 0) {
+    obj.classList.remove("selecionavel")
+    obj.value = jogador;
+    // setTimeout(() => {
+      obj.innerHTML = "&#9711" 
+      idMod = parseInt(obj.id.slice(-1));
+      // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
+      velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.value);
+      verificarVitoria(idMod);
+      console.log(velha)
+    // }, 500); 
+  }
+
 }
 
 function verificarVitoria(id){
@@ -120,6 +192,9 @@ function verificarVitoria(id){
   {
     terminar()
     document.getElementById("titulo").innerText = "Empate!";
+    destacarColuna(0);
+    destacarColuna(1);
+    destacarColuna(2);
 
   }
   else{
@@ -147,33 +222,23 @@ function destacarDiagonal(diag) {
   document.getElementById(('b' + (8-(diag*2)))).classList.add("destaque__vitoria");
 }
 
-function terminar() {
+function removeListenerBotoes(){
   let botoes = document.querySelectorAll(".botoes");
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      botoes[3 * i + j].classList.remove("selecionavel")
+      botoes[3 * i + j].classList.remove("selecionavel");
       botoes[3 * i + j].removeEventListener("click", cliqueBotao);
-      if(ganhador==0){
-        botoes[3 * i + j].classList.add("destaque__vitoria");
-      }
     }
   }
+}
+
+function terminar() {
+  removeListenerBotoes();
   document.getElementById("titulo").classList.add("destaque_titulo");
 }
 
 function reiniciar() {
-  let botoes = document.querySelectorAll(".botoes");
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      velha[i][j] = 0;
-      botoes[3 * i + j].innerHTML = "";
-      botoes[3 * i + j].value = "0";
-      botoes[3 * i + j].classList.remove("destaque__vitoria")
-      document.getElementById("titulo").classList.remove("destaque_titulo");
-    }
-  }
-  ganhador = 0;
-  jogada = 0;
+  terminar();
   iniciar();
 }
 
@@ -182,12 +247,12 @@ window.onload = function () {
   const form = document.getElementById('form_players')
   form.addEventListener('submit', e => {
     e.preventDefault()
-    if(verificarNomesIguais(form.elements[0].value,form.elements[1].value)){
-      if(form.elements[0].value!=""){
-        player1 = form.elements[0].value
+    if(verificarNomesIguais(form.elements[2].value,form.elements[3].value)){
+      if(form.elements[2].value!=""){
+        player1 = form.elements[2].value
       }
-      if(form.elements[1].value!=""){
-        player2 = form.elements[1].value
+      if(form.elements[3].value!=""){
+        player2 = form.elements[3].value
       }
       document.getElementsByClassName("modal")[0].classList.add("modal__conlcuido");
       iniciar()
