@@ -245,6 +245,14 @@ function reiniciar() {
 window.onload = function () {
   document.getElementById("reiniciar__botao").addEventListener("click", reiniciar)
   const form = document.getElementById('form_players')
+  var gameMode = form.switchMode;
+  for(let i=0;i<gameMode.length;i++){
+    gameMode[i].onclick = function(){
+      modo = this.value;
+//FUNÇÃO PARA EXIBIR CONTEUDO DE CADA MODO(1-NOME DO PLAYER / 2-NOME DOS PLAYERS)
+    }
+  }
+  
   form.addEventListener('submit', e => {
     e.preventDefault()
     if(verificarNomesIguais(form.elements[2].value,form.elements[3].value)){
