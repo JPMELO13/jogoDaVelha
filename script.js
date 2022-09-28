@@ -249,7 +249,13 @@ window.onload = function () {
     gameMode[i].onclick = function(){
       modo = this.value;
       let campos = document.getElementsByClassName("player__field");
-      
+      let botaoJogar = document.getElementsByClassName("jogar");
+      for(let j=0;j<campos.length;){
+        campos[j].remove();
+      }
+      if(botaoJogar.length>0){
+        botaoJogar[0].remove();
+      }
 
       //FAZER CAMPOS SUMIR E APARECEREM CORRETAMENTE
       
