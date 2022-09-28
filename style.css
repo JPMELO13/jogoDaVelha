@@ -239,7 +239,7 @@ a{
     display:none !important;
 }
 
-/* .switch-field {
+.switch-field {
     margin-bottom: 5vh;
 	display: flex;
 	overflow: hidden;
@@ -278,7 +278,7 @@ a{
 
 .switch-field label:last-of-type {
 	border-radius: 0 1.5em 1.5em 0;
-} */
+}
 
 
 @media(max-width:550px){

@@ -6,7 +6,7 @@ var jogador = 0;
 var ganhador = 0;
 var player1 = "Player1"
 var player2 = "Player2"
-var modo = ""
+var modo = "single"
 
 function mudarTema(destaque, secundaria, fundo, hover) {
   //passando codigos hex das cores por parâmetro é alterada no arquivo css
@@ -136,14 +136,13 @@ function botJogar(){
   if (obj.value == "0" && ganhador == 0) {
     obj.classList.remove("selecionavel")
     obj.value = jogador;
-    // setTimeout(() => {
+    setTimeout(() => {
       obj.innerHTML = "&#9711" 
       idMod = parseInt(obj.id.slice(-1));
       // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
       velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.value);
       verificarVitoria(idMod);
-      console.log(velha)
-    // }, 500); 
+    }, 500); 
   }
 
 }
@@ -249,7 +248,24 @@ window.onload = function () {
   for(let i=0;i<gameMode.length;i++){
     gameMode[i].onclick = function(){
       modo = this.value;
-//FUNÇÃO PARA EXIBIR CONTEUDO DE CADA MODO(1-NOME DO PLAYER / 2-NOME DOS PLAYERS)
+      let campos = document.getElementsByClassName("player__field");
+      
+
+      //FAZER CAMPOS SUMIR E APARECEREM CORRETAMENTE
+      
+      form.insertAdjacentHTML("beforeend", "<div class='player__field'><span class='player__icon'>&#10005 </span><input type='text' class='player__input' name='player1' placeholder='Player1'></div>");
+      
+
+      if (modo=="single"){
+        player2="BOT";
+
+      }
+      else if (modo=="multi"){
+        form.insertAdjacentHTML("beforeend", "<div class='player__field'><span class='player__icon'>&#9711</span><input type='text' class='player__input' name='player2' placeholder='Player2'></div>")
+
+      }
+      console.log(campos);
+      form.insertAdjacentHTML("beforeend", "<button class='botao jogar' type='submit'>Jogar</button>");
     }
   }
   
