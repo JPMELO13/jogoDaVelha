@@ -253,6 +253,7 @@ window.onload = function () {
       
       if (modo=="single"){
         player2="BOT";
+        form.insertAdjacentHTML("beforeend", "<div class='player__field'><div class='switch-field'><input type='radio' id='radio-facil' name='dificuldade' value='facil' ><label for='radio-facil'>Fácil</label><input type='radio' id='radio-dif' name='dificuldade' value='dificil'><label for='radio-dif'>Difícil</label></div></div>");
 
       }
       else if (modo=="multi"){

@@ -170,7 +170,8 @@ a{
 
 .player__field{
     padding: 10px 0px;	
-	position: relative;	
+	position: relative;
+    margin:auto;
 }
 
 .player__icon{
@@ -186,7 +187,6 @@ a{
 	background: none;
 	padding: 10px;
 	padding-left: 30px;
-	width: 75%;
 	transition: .2s;
     margin-top: 20px;
     color: var(--branco);
@@ -245,6 +245,7 @@ a{
     margin-bottom: 5vh;
 	display: flex;
 	overflow: hidden;
+    margin:auto;
 }
 
 .switch-field input {
