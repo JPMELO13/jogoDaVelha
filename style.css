@@ -132,6 +132,7 @@ a{
 
 .selecionavel:hover{
     border-color: var(--cor-hover-botao);
+    cursor: pointer;
 }
 
 .destaque__vitoria{
@@ -157,6 +158,7 @@ a{
 .botao:hover{
     background-color: var(--cor-hover-botao);
     box-shadow: none;
+    cursor: pointer;
 }
 
 .form__players{
