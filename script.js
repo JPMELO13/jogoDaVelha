@@ -239,6 +239,7 @@ window.onload = function () {
   const form = document.getElementById('form_players')
   var gameMode = form.switchMode;
   for(let i=0;i<gameMode.length;i++){
+    //MÁ PRÁTICA DE PROGRAMAÇÃO ABAIXO (ONCLICK) -> MUDAR (ADICIONAR EVENT LISTENER DO CLIQUE)
     gameMode[i].onclick = function(){
       modo = this.value;
       let campos = document.getElementsByClassName("player__field");
