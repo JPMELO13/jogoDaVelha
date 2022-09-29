@@ -39,11 +39,6 @@ function sorteiaPrimeiroJogador(){
 }
 
 function mudarJogador() {
-  console.log("fim da jogada:"+jogada);
-
-
-  
-
   // multiplicação por -1 faz o jogador "atual" alternar em -1 e 1. Função altera exibição do turno
   jogador = jogador * -1;
   if (jogador == 1){
@@ -83,8 +78,6 @@ function iniciar() {
   jogada = 0;
 
   sorteiaPrimeiroJogador();
-  console.log(jogador);
-
   if ((jogador == -1)&&(modo == "single")){
     botJogar();
   }
@@ -266,7 +259,6 @@ window.onload = function () {
         form.insertAdjacentHTML("beforeend", "<div class='player__field'><span class='player__icon'>&#9711</span><input type='text' class='player__input' name='player2' placeholder='Player2'></div>")
 
       }
-      console.log(campos);
       form.insertAdjacentHTML("beforeend", "<button class='botao jogar' type='submit'>Jogar</button>");
     }
   }
