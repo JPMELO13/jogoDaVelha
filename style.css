@@ -265,6 +265,10 @@ a{
 
 .switch-field label:hover {
 	cursor: pointer;
+    background-color: var(--cor-hover-botao);
+    color: white;
+    box-shadow: none;
+
 }
 
 .switch-field input:checked + label {

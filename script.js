@@ -255,13 +255,9 @@ window.onload = function () {
       }
       if(botaoJogar.length>0){
         botaoJogar[0].remove();
-      }
-
-      //FAZER CAMPOS SUMIR E APARECEREM CORRETAMENTE
-      
+      }      
       form.insertAdjacentHTML("beforeend", "<div class='player__field'><span class='player__icon'>&#10005 </span><input type='text' class='player__input' name='player1' placeholder='Player1'></div>");
       
-
       if (modo=="single"){
         player2="BOT";
 
