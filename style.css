@@ -87,6 +87,7 @@ a{
 
 .mudar__cor:hover{
     border: var(--branco) 5px solid;
+    cursor: pointer;
 }
 
 .conteudo__principal{
