@@ -156,7 +156,6 @@ a{
 
 .botao:hover{
     background-color: var(--cor-hover-botao);
-    color: white;
     box-shadow: none;
 }
 
@@ -266,14 +265,20 @@ a{
 .switch-field label:hover {
 	cursor: pointer;
     background-color: var(--cor-hover-botao);
-    color: white;
-    box-shadow: none;
 
 }
 
 .switch-field input:checked + label {
 	background-color: var(--cor-destaque);
 	box-shadow: inset 21px 15px 19px 9px var(--cor-secundaria); 
+}
+.switch-field input:checked + label {
+	background-color: var(--cor-destaque);
+	box-shadow: inset 21px 15px 19px 9px var(--cor-secundaria); 
+}
+.switch-field input:checked + label:hover {
+    background-color: var(--cor-hover-botao);
+    box-shadow: none;
 }
 
 .switch-field label:first-of-type {
