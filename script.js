@@ -4,8 +4,8 @@ var velha = [[0, 0, 0],
 var jogada = 0;
 var jogador = 0;
 var ganhador = 0;
-var player1 = "Player1"
-var player2 = "Player2"
+var player1 = ""
+var player2 = ""
 var modo = "single"
 
 function mudarTema(destaque, secundaria, fundo, hover) {
@@ -18,9 +18,9 @@ function mudarTema(destaque, secundaria, fundo, hover) {
 
 //EXPOR ERROS AO USUARIO
 function verificarNomesIguais(nome1, nome2){
-  let resultado = 1
-  if (nome1==nome2 && nome1!=""){
-    resultado =0;
+  let resultado = 0
+  if (nome1==nome2){
+    resultado =1;
   }
   return resultado;
 }
@@ -266,14 +266,21 @@ window.onload = function () {
   }
   
   form.addEventListener('submit', e => {
-    e.preventDefault()
-    if(verificarNomesIguais(form.elements[2].value,form.elements[3].value)){
-      if(form.elements[2].value!=""){
-        player1 = form.elements[2].value
+    e.preventDefault();
+    player1 = "Player1"
+    if(form.elements[2].value != ""){
+      player1=form.elements[2].value;
+    }
+    if (modo == "single"){
+      player2 = "BOT";
+    }// if (modo==single)
+    else{
+      player2 = "Player2"
+      if(form.elements[3].value != ""){
+        player2=form.elements[3].value;
       }
-      if(form.elements[3].value!=""){
-        player2 = form.elements[3].value
-      }
+    }//(if modo==multi)
+    if(!(verificarNomesIguais(player1,player2))){
       document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
       iniciar()
     }
