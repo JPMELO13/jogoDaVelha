@@ -274,7 +274,7 @@ window.onload = function () {
       if(form.elements[3].value!=""){
         player2 = form.elements[3].value
       }
-      document.getElementsByClassName("modal")[0].classList.add("modal__conlcuido");
+      document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
       iniciar()
     }
   })
