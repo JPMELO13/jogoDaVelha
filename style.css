@@ -221,6 +221,16 @@ a{
     margin:0.5em;
 }
 
+h3{
+    position: absolute;
+    align-self: center;
+	color: var(--branco);
+    text-decoration: none;
+    background-color: var(--cor-hover-botao);
+    border-radius: 1.5em;
+    width: 50%;
+}
+
 .modal{
     display: flex;
     

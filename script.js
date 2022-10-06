@@ -8,6 +8,8 @@ var player1 = ""
 var player2 = ""
 var modo = "single"
 
+const form = document.getElementById('form_players');
+
 function mudarTema(destaque, secundaria, fundo, hover) {
   //passando codigos hex das cores por parâmetro é alterada no arquivo css
   document.documentElement.style.setProperty('--cor-destaque', destaque);
@@ -16,7 +18,6 @@ function mudarTema(destaque, secundaria, fundo, hover) {
   document.documentElement.style.setProperty('--cor-hover-botao', hover);
 }
 
-//EXPOR ERROS AO USUARIO
 function verificarNomesIguais(nome1, nome2){
   let resultado = 0
   if (nome1==nome2){
@@ -234,12 +235,38 @@ function reiniciar() {
   iniciar();
 }
 
+function capturaDadosForm(e){
+  e.preventDefault();
+    player1 = "Player1"
+    if(form.elements[2].value != ""){
+      player1=form.elements[2].value;
+    }
+    if (modo == "single"){
+      player2 = "BOT";
+    }// if (modo==single)
+    else{
+      player2 = "Player2"
+      if(form.elements[3].value != ""){
+        player2=form.elements[3].value;
+      }
+    }//(if modo==multi)
+    if(verificarNomesIguais(player1,player2)==0){
+      document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
+      iniciar()
+    }else{
+      form.insertAdjacentHTML("beforeend", "<h3 class='conteudo__titulo' >Nomes inválidos</h3>")
+      setTimeout(() => {
+        document.querySelector("h3").remove();
+        
+      }, 1000); 
+    }
+
+}
+
 window.onload = function () {
   document.getElementById("reiniciar__botao").addEventListener("click", reiniciar)
-  const form = document.getElementById('form_players')
   var gameMode = form.switchMode;
   for(let i=0;i<gameMode.length;i++){
-    //MÁ PRÁTICA DE PROGRAMAÇÃO ABAIXO (ONCLICK) -> MUDAR (ADICIONAR EVENT LISTENER DO CLIQUE)
     gameMode[i].onclick = function(){
       modo = this.value;
       let campos = document.getElementsByClassName("player__field");
@@ -265,24 +292,5 @@ window.onload = function () {
     }
   }
   
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    player1 = "Player1"
-    if(form.elements[2].value != ""){
-      player1=form.elements[2].value;
-    }
-    if (modo == "single"){
-      player2 = "BOT";
-    }// if (modo==single)
-    else{
-      player2 = "Player2"
-      if(form.elements[3].value != ""){
-        player2=form.elements[3].value;
-      }
-    }//(if modo==multi)
-    if(!(verificarNomesIguais(player1,player2))){
-      document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
-      iniciar()
-    }
-  })
+  form.addEventListener('submit', capturaDadosForm)
 };
