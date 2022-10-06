@@ -6,7 +6,7 @@ var jogador = 0;
 var ganhador = 0;
 var player1 = ""
 var player2 = ""
-var modo = "single"
+var modo = ""
 
 const form = document.getElementById('form_players');
 
