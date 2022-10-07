@@ -2,13 +2,14 @@
 
 :root{
     --fonte-principal:'Orbitron';
-    --cor-secundaria:#CD4978;
-    --cor-destaque: #FA8B3B;
-    --cor-de-fundo:#2B2C30;
-    --cor-hover-botao:#FF005B;
+    --cor-secundaria:#2B2C30;
+    --cor-destaque: #8C8C8C;
+    --cor-de-fundo:#1B1B1B;
+    --cor-hover-botao:#353535;
     --branco: #ffffff;
     --preto: #000000;
 }
+
 
 *{
     margin: 0;

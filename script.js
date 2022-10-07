@@ -4,9 +4,10 @@ var velha = [[0, 0, 0],
 var jogada = 0;
 var jogador = 0;
 var ganhador = 0;
-var player1 = ""
-var player2 = ""
-var modo = ""
+var player1 = "";
+var player2 = "";
+var modo = "";
+var dificuldade = "";
 
 const form = document.getElementById('form_players');
 
@@ -64,7 +65,6 @@ function mudarJogador() {
 }
 
 function iniciar() {
-
   let botoes = document.querySelectorAll(".botoes");
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
@@ -243,6 +243,7 @@ function capturaDadosForm(e){
     }
     if (modo == "single"){
       player2 = "BOT";
+      dificuldade = form.dificuldade.value
     }// if (modo==single)
     else{
       player2 = "Player2"
@@ -253,6 +254,7 @@ function capturaDadosForm(e){
     if(verificarNomesIguais(player1,player2)==0){
       document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
       iniciar()
+      console.log(dificuldade);
     }else{
       form.insertAdjacentHTML("beforeend", "<h3 class='conteudo__titulo' >Nomes inválidos</h3>")
       setTimeout(() => {
