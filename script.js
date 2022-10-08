@@ -136,7 +136,7 @@ function botJogar(){
       // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
       velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.value);
       verificarVitoria(idMod);
-    }, 1000);
+    }, 500);
   }
 
 }
@@ -235,6 +235,13 @@ function reiniciar() {
   iniciar();
 }
 
+function mensagemDeErro(mensagem){
+  form.insertAdjacentHTML("beforeend", "<h3 class='conteudo__titulo' >"+ mensagem+"</h3>")
+  setTimeout(() => {
+    document.querySelector("h3").remove();
+  }, 1000);
+}
+
 function capturaDadosForm(e){
   e.preventDefault();
     player1 = "Player1"
@@ -252,25 +259,20 @@ function capturaDadosForm(e){
       }
     }//(if modo==multi)
     if(verificarNomesIguais(player1,player2)==0){
-      if((modo=="single")&&(dificuldade=="")){
-        form.insertAdjacentHTML("beforeend", "<h3 class='conteudo__titulo' >Dificuldade inválida!</h3>")
-        setTimeout(() => {
-          document.querySelector("h3").remove();
-        }, 1000);
+      if(!((modo=="single")&&(dificuldade==""))){
+        document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
+        iniciar();
       }
       else{
-        document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
-        iniciar()
-      }
-      
+        mensagemDeErro("Dificuldade Inválida!");
+      }      
     }else{
-      form.insertAdjacentHTML("beforeend", "<h3 class='conteudo__titulo' >Nome(s) inválido(s)!</h3>")
-      setTimeout(() => {
-        document.querySelector("h3").remove();
-      }, 1000); 
+      mensagemDeErro("Nome(s) Inválido(s)!");
     }
 
 }
+
+
 
 window.onload = function () {
   document.getElementById("reiniciar__botao").addEventListener("click", reiniciar)
