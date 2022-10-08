@@ -136,7 +136,7 @@ function botJogar(){
       // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
       velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.value);
       verificarVitoria(idMod);
-    }, 500); 
+    }, 1000);
   }
 
 }
@@ -252,14 +252,21 @@ function capturaDadosForm(e){
       }
     }//(if modo==multi)
     if(verificarNomesIguais(player1,player2)==0){
-      document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
-      iniciar()
-      console.log(dificuldade);
+      if((modo=="single")&&(dificuldade=="")){
+        form.insertAdjacentHTML("beforeend", "<h3 class='conteudo__titulo' >Dificuldade inválida!</h3>")
+        setTimeout(() => {
+          document.querySelector("h3").remove();
+        }, 1000);
+      }
+      else{
+        document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
+        iniciar()
+      }
+      
     }else{
-      form.insertAdjacentHTML("beforeend", "<h3 class='conteudo__titulo' >Nomes inválidos</h3>")
+      form.insertAdjacentHTML("beforeend", "<h3 class='conteudo__titulo' >Nome(s) inválido(s)!</h3>")
       setTimeout(() => {
         document.querySelector("h3").remove();
-        
       }, 1000); 
     }
 
