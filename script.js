@@ -159,6 +159,7 @@ function verificaSomaAlinhada(valor, estrutura){
 
 
 function botJogar(){
+  let botaoEscolhido;
   if (dificuldade=="facil"){
     //soma diagonal ou linha ou coluna for igual a - 2 ele joga alinhado(+prioridade)
     //soma diagonal ou linha ou coluna for igual a 2 ele joga alinhado(-prioridade)
@@ -169,41 +170,39 @@ function botJogar(){
     let bloqColuna = verificaSomaAlinhada(2, "coluna");
     let bloqDiagonal = verificaSomaAlinhada(2, "diagonal");
     if(ganhaLinha>-1){
-      console.log("o bot deve jogar na casa " + ganhaLinha);
+      botaoEscolhido=ganhaLinha;
     }else if(ganhaColuna>-1){
-      console.log("o bot deve jogar na casa " + ganhaColuna);
+      botaoEscolhido=ganhaColuna;
     }else if(ganhaDiagonal>-1){
-      console.log("o bot deve jogar na casa " + ganhaDiagonal);
+      botaoEscolhido=ganhaDiagonal;
     }else if(bloqLinha>-1){
-      console.log("o bot deve bloquear a casa " + bloqLinha);
+      botaoEscolhido=bloqLinha;
     }else if(bloqColuna>-1){
-      console.log("o bot deve bloquear a casa " + bloqColuna);
+      botaoEscolhido=bloqColuna;
     }else if(bloqDiagonal>-1){
-      console.log("o bot deve bloquear a casa " + bloqDiagonal);
-    }
-    
-
-    else{
-      let botaoEscolhido;
+      botaoEscolhido=bloqDiagonal;
+    }else{
+      
       do{
         botaoEscolhido = Math.floor(Math.random() * 9);
       }while (velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido%3] != 0)
-    
-      let botoes = document.querySelectorAll(".botoes");
-      let obj=botoes[botaoEscolhido];
-      
-      if (obj.value == "0" && ganhador == 0) {
-        obj.classList.remove("selecionavel")
-        obj.value = jogador;
-        setTimeout(() => {
-          obj.innerHTML = "&#9711" 
-          idMod = parseInt(obj.id.slice(-1));
-          // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
-          velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.value);
-          verificarVitoria(idMod);
-        }, 500);
-      }
     }
+    
+    let botoes = document.querySelectorAll(".botoes");
+    let obj=botoes[botaoEscolhido];
+      
+    if (obj.value == "0" && ganhador == 0) {
+      obj.classList.remove("selecionavel")
+      obj.value = jogador;
+      setTimeout(() => {
+        obj.innerHTML = "&#9711" 
+        idMod = parseInt(obj.id.slice(-1));
+        // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
+        velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.value);
+        verificarVitoria(idMod);
+      }, 500);
+    }
+    
     
   }
   
