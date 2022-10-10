@@ -200,27 +200,27 @@ function verificarVitoria(id){
   let somaLinha=0;
   let somaColuna=0;
   let somaDiagonal0=0;
-  let somaDiagonal1=0;
+  let somaDiagonal2=0;
   for(let i=0;i<3;i++){
     somaLinha+=velha[Math.floor(id / 3)][i]
     somaColuna+=velha[i][id%3]
     if (id==4){
       somaDiagonal0 += velha[i][i];
-      somaDiagonal1 += velha[i][2-i]
+      somaDiagonal2 += velha[i][2-i]
     }
     else if (id%8==0){
       somaDiagonal0 += velha[i][i];
     }
     else if (id%2==0){
-      somaDiagonal1 += velha[i][2-i];
+      somaDiagonal2 += velha[i][2-i];
     }
   }
   if(somaDiagonal0 == (3*jogador)){
     ganhador = jogador;
     destacarDiagonal(0)
-  }else if(somaDiagonal1 == (3*jogador)){
+  }else if(somaDiagonal2 == (3*jogador)){
     ganhador = jogador;
-    destacarDiagonal(1)
+    destacarDiagonal(2)
   } else if (somaLinha == (3*jogador)){
     ganhador = jogador;
     destacarLinha(id);
@@ -266,8 +266,8 @@ function destacarColuna(id) {
 
 function destacarDiagonal(diag) {
   document.getElementById(('b4')).classList.add("destaque__vitoria");
-  document.getElementById(('b' + (diag*2))).classList.add("destaque__vitoria");
-  document.getElementById(('b' + (8-(diag*2)))).classList.add("destaque__vitoria");
+  document.getElementById('b' + diag).classList.add("destaque__vitoria");
+  document.getElementById('b' + (8-diag)).classList.add("destaque__vitoria");
 }
 
 function removeListenerBotoes(){
