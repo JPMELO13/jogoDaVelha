@@ -328,8 +328,13 @@ function capturaDadosForm(e){
     }//(if modo==multi)
     if(verificarNomesIguais(player1,player2)==0){
       if(!((modo=="single")&&(dificuldade==""))){
-        document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
-        iniciar();
+        if(dificuldade!="dificil"){
+          document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
+          iniciar();
+        }
+        else{
+          mensagemDeErro("Em Desenvolvimento!");
+        }
       }
       else{
         mensagemDeErro("Dificuldade Inválida!");
