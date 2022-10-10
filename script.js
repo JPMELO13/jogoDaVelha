@@ -330,12 +330,12 @@ function capturaDadosForm(e){
     }//(if modo==multi)
     if(verificarNomesIguais(player1,player2)==0){
       if(!((modo=="single")&&(dificuldade==""))){
-        if(dificuldade!="dificil"){
+        if(!((modo=="single")&&(dificuldade=="dificil"))){
           document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
           iniciar();
         }
         else{
-          mensagemDeErro("Em Desenvolvimento!");
+          mensagemDeErro("Não disponível!");
         }
       }
       else{
