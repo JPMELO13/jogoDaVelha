@@ -165,9 +165,11 @@ function botJogar(){
     //soma diagonal ou linha ou coluna for igual a 2 ele joga alinhado(-prioridade)
     let ganhaLinha = verificaSomaAlinhada(-2, "linha");
     let ganhaColuna = verificaSomaAlinhada(-2, "coluna");
+    //GANHAR DIAGONAL NAO ESTÁ FUNCIONANDO REVER
     let ganhaDiagonal = verificaSomaAlinhada(-2, "diagonal");
     let bloqLinha = verificaSomaAlinhada(2, "linha");
     let bloqColuna = verificaSomaAlinhada(2, "coluna");
+    //REVER BLOQUEIO DIAGONAL -> NAO ESTÁ FUNCIONANDO
     let bloqDiagonal = verificaSomaAlinhada(2, "diagonal");
     if(ganhaLinha>-1){
       botaoEscolhido=ganhaLinha;
