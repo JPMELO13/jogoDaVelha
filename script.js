@@ -124,25 +124,39 @@ function verificaSomaAlinhada(valor, estrutura){
   for (let i=0; i<3;i++){
     if(estrutura=="linha"){
       if((velha[i][0]+velha[i][1]+velha[i][2]) == valor){
-        return i;
+        for(let j=0;j<3;j++){
+          if (velha[i][j] ==0){
+            return (i*3+j);
+          }
+        }
       }
     }
     else if(estrutura=="coluna"){
       if((velha[0][i]+velha[1][i]+velha[2][i]) == valor){
-        return i;
+        for(let j=0;j<3;j++){
+          if (velha[j][i] ==0){
+            return (j*3+i);
+          }
+        }
       }
     }
     else if((estrutura=="diagonal")&&(i!=1)){
-      if ((velha[0][i-0]+velha[1][1]+velha[2][2-i])==valor){
-        return i;
-      }
-      
+      if ((velha[0][i]+velha[1][1]+velha[2][2-i])==valor){
+        if (velha[0][i]==0){
+          return i;
+        }
+        else if (velha[1][1]==0){
+          return 4;
+        }
+        else if (velha[2][2-i]){
+          return 6+(2-i);
+        }
+      } 
     }
-
   }
   return -1;
-  
 }
+
 
 function botJogar(){
   if (dificuldade=="facil"){
@@ -155,17 +169,17 @@ function botJogar(){
     let bloqColuna = verificaSomaAlinhada(2, "coluna");
     let bloqDiagonal = verificaSomaAlinhada(2, "diagonal");
     if(ganhaLinha>-1){
-      console.log("o bot deve jogar na linha " + ganhaLinha);
+      console.log("o bot deve jogar na casa " + ganhaLinha);
     }else if(ganhaColuna>-1){
-      console.log("o bot deve jogar na coluna " + ganhaColuna);
+      console.log("o bot deve jogar na casa " + ganhaColuna);
     }else if(ganhaDiagonal>-1){
-      console.log("o bot deve jogar na diagonal " + ganhaDiagonal);
+      console.log("o bot deve jogar na casa " + ganhaDiagonal);
     }else if(bloqLinha>-1){
-      console.log("o bot deve bloquear a linha " + bloqLinha);
+      console.log("o bot deve bloquear a casa " + bloqLinha);
     }else if(bloqColuna>-1){
-      console.log("o bot deve bloquear a Coluna " + bloqColuna);
+      console.log("o bot deve bloquear a casa " + bloqColuna);
     }else if(bloqDiagonal>-1){
-      console.log("o bot deve bloquear a Diagonal " + bloqDiagonal);
+      console.log("o bot deve bloquear a casa " + bloqDiagonal);
     }
     
 
