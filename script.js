@@ -148,7 +148,7 @@ function verificaSomaAlinhada(valor, estrutura){
         else if (velha[1][1]==0){
           return 4;
         }
-        else if (velha[2][2-i]){
+        else if (velha[2][2-i]==0){
           return 6+(2-i);
         }
       } 
