@@ -66,6 +66,7 @@ function mudarJogador() {
 }
 
 function iniciar() {
+  document.getElementById("titulo").classList.remove("destaque_titulo");
   let botoes = document.querySelectorAll(".botoes");
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
@@ -73,7 +74,6 @@ function iniciar() {
       botoes[3 * i + j].innerHTML = "";
       botoes[3 * i + j].value = "0";
       botoes[3 * i + j].classList.remove("destaque__vitoria")
-      document.getElementById("titulo").classList.remove("destaque_titulo");
     }
   }
   ganhador = 0;
