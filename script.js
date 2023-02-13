@@ -9,6 +9,7 @@ var player1 = "";
 var player2 = "";
 var modo = "";
 var dificuldade = "";
+var espera = null;
 
 const form = document.getElementById('form_players');
 
@@ -194,7 +195,7 @@ function botJogar(){
     if (obj.value == "0" && ganhador == 0) {
       obj.classList.remove("selecionavel")
       obj.value = jogador;
-      setTimeout(() => {
+      espera = setTimeout(() => {
         obj.innerHTML = "&#9711" 
         idMod = parseInt(obj.id.slice(-1));
         // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
@@ -296,6 +297,7 @@ function removeListenerBotoes(){
 function terminar() {
   removeListenerBotoes();
   document.getElementById("titulo").classList.add("destaque_titulo");
+  clearTimeout(espera);
 }
 
 function reiniciar() {
