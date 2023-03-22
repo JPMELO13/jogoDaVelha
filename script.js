@@ -82,7 +82,7 @@ function iniciar() {
 
   sorteiaPrimeiroJogador();
   if ((jogador == -1)&&(modo == "single")){
-    botJogar();
+    botJogar(); 
   }
   else{
     addListenerBotoes0();
@@ -120,43 +120,7 @@ function cliqueBotao(obj){
   }
 }
 
-function verificaSomaAlinhada(valor, estrutura){
-  //retorna a posição da estrutura onde deve ser jogado
-  for (let i=0; i<3;i++){
-    if(estrutura=="linha"){
-      if((velha[i][0]+velha[i][1]+velha[i][2]) == valor){
-        for(let j=0;j<3;j++){
-          if (velha[i][j] ==0){
-            return (i*3+j);
-          }
-        }
-      }
-    }
-    else if(estrutura=="coluna"){
-      if((velha[0][i]+velha[1][i]+velha[2][i]) == valor){
-        for(let j=0;j<3;j++){
-          if (velha[j][i] ==0){
-            return (j*3+i);
-          }
-        }
-      }
-    }
-    else if((estrutura=="diagonal")&&(i!=1)){
-      if ((velha[0][i]+velha[1][1]+velha[2][2-i])==valor){
-        if (velha[0][i]==0){
-          return i;
-        }
-        else if (velha[1][1]==0){
-          return 4;
-        }
-        else if (velha[2][2-i]==0){
-          return 6+(2-i);
-        }
-      } 
-    }
-  }
-  return -1;
-}
+
 
 
 function botJogar(){
@@ -210,54 +174,99 @@ function botJogar(){
 
 }
 
-function verificarVitoria(id){
-  let somaLinha=0;
-  let somaColuna=0;
-  let somaDiagonal0=0;
-  let somaDiagonal2=0;
-  for(let i=0;i<3;i++){
-    somaLinha+=velha[Math.floor(id / 3)][i]
-    somaColuna+=velha[i][id%3]
-    if (id==4){
-      somaDiagonal0 += velha[i][i];
-      somaDiagonal2 += velha[i][2-i]
+function verificaSomaAlinhada(valor, estrutura){
+  //retorna a posição da estrutura onde deve ser jogado
+  for (let i=0; i<3;i++){
+    if(estrutura=="linha"){
+      if((velha[i][0]+velha[i][1]+velha[i][2]) == valor){
+        for(let j=0;j<3;j++){
+          if (velha[i][j] ==0){
+            return (i*3+j);
+          }
+        }
+      }
     }
-    else if (id%8==0){
-      somaDiagonal0 += velha[i][i];
+    else if(estrutura=="coluna"){
+      if((velha[0][i]+velha[1][i]+velha[2][i]) == valor){
+        for(let j=0;j<3;j++){
+          if (velha[j][i] ==0){
+            return (j*3+i);
+          }
+        }
+      }
     }
-    else if (id%2==0){
-      somaDiagonal2 += velha[i][2-i];
+    else if((estrutura=="diagonal")&&(i!=1)){
+      if ((velha[0][i]+velha[1][1]+velha[2][2-i])==valor){
+        if (velha[0][i]==0){
+          return i;
+        }
+        else if (velha[1][1]==0){
+          return 4;
+        }
+        else if (velha[2][2-i]==0){
+          return 6+(2-i);
+        }
+      } 
     }
   }
-  if(somaDiagonal0 == (3*jogador)){
-    ganhador = jogador;
-    destacarDiagonal(0)
-  }else if(somaDiagonal2 == (3*jogador)){
-    ganhador = jogador;
-    destacarDiagonal(2)
-  } else if (somaLinha == (3*jogador)){
-    ganhador = jogador;
-    destacarLinha(id);
-  } else if (somaColuna == (3*jogador)){
-    ganhador = jogador;
-    destacarColuna(id);
-  }
-  if (ganhador == 1) {
-    document.getElementById("titulo").innerText = player1 + " venceu!";
-    terminar();
-  }
-  else if (ganhador == -1) {
-    document.getElementById("titulo").innerText = player2 + " venceu!";
-    terminar();
-  }
-  else if (ganhador == 0 && jogada ==8)
-  {
-    terminar()
-    document.getElementById("titulo").innerText = "Empate!";
-    destacarColuna(0);
-    destacarColuna(1);
-    destacarColuna(2);
+  return -1;
+}
 
+function verificarVitoria(id){
+  if (jogada>3){
+    //Ao fim dos turnos verifica as condicoes de vitoria e muda o turno(Jogador)
+    let somaLinha=0;
+    let somaColuna=0;
+    let somaDiagonal0=0;
+    let somaDiagonal2=0;
+    for(let i=0;i<3;i++){
+      somaLinha+=velha[Math.floor(id / 3)][i]
+      somaColuna+=velha[i][id%3]
+      if (id==4){
+        somaDiagonal0 += velha[i][i];
+        somaDiagonal2 += velha[i][2-i]
+      }
+      else if (id%8==0){
+        somaDiagonal0 += velha[i][i];
+      }
+      else if (id%2==0){
+        somaDiagonal2 += velha[i][2-i];
+      }
+    }
+    if(somaDiagonal0 == (3*jogador)){
+      ganhador = jogador;
+      destacarDiagonal(0)
+    }
+    else if(somaDiagonal2 == (3*jogador)){
+      ganhador = jogador;
+      destacarDiagonal(2)
+    }
+    else if (somaLinha == (3*jogador)){
+      ganhador = jogador;
+      destacarLinha(id);
+    } else if (somaColuna == (3*jogador)){
+      ganhador = jogador;
+      destacarColuna(id);
+    }
+    if (ganhador == 1) {
+      document.getElementById("titulo").innerText = player1 + " venceu!";
+      terminar();
+    }
+    else if (ganhador == -1) {
+      document.getElementById("titulo").innerText = player2 + " venceu!";
+      terminar();
+    }
+    else if (ganhador == 0 && jogada ==8)
+    {
+      terminar()
+      document.getElementById("titulo").innerText = "Empate!";
+      destacarColuna(0);
+      destacarColuna(1);
+      destacarColuna(2);
+    }
+    else{
+      mudarJogador();
+    }
   }
   else{
     mudarJogador();
@@ -321,16 +330,16 @@ function capturaDadosForm(e){
     if (modo == "single"){
       player2 = "BOT";
       dificuldade = form.dificuldade.value
-    }// if (modo==single)
+    }// (if  modo==single)
     else{
       player2 = "Player2"
       if(form.elements[3].value != ""){
         player2=form.elements[3].value;
       }
-    }//(if modo==multi)
+    }//else(if modo==multi)
     if(verificarNomesIguais(player1,player2)==0){
       if(!((modo=="single")&&(dificuldade==""))){
-        if(!((modo=="single")&&(dificuldade=="dificil"))){
+        if(!((modo=="single")&&(dificuldade=="impossivel"))){
           document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
           iniciar();
         }
@@ -367,7 +376,7 @@ window.onload = function () {
       
       if (modo=="single"){
         player2="BOT";
-        form.insertAdjacentHTML("beforeend", "<div class='player__field'><div class='switch-field'><input type='radio' id='radio-facil' name='dificuldade' value='facil' ><label for='radio-facil'>Fácil</label><input type='radio' id='radio-dif' name='dificuldade' value='dificil'><label for='radio-dif'>Difícil</label></div></div>");
+        form.insertAdjacentHTML("beforeend", "<div class='player__field'><div class='switch-field'><input type='radio' id='radio-facil' name='dificuldade' value='facil' ><label for='radio-facil'>Fácil</label><input type='radio' id='radio-dif' name='dificuldade' value='impossivel'><label for='radio-dif'>Impossível</label></div></div>");
 
       }
       else if (modo=="multi"){
