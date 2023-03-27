@@ -212,9 +212,11 @@ function verificaSomaAlinhada(valor, estrutura){
   return -1;
 }
 
+//separar função abaixo, armazenar estrutura da vitoria numa variável, mudar turno em outra função(chamar fora dela) e chamar destacarEstrutura de acordo com a vitoria fora dela também(atenção às condições de vitoria e EMPATE)
+
 function verificarVitoria(id){
   if (jogada>3){
-    //Ao fim dos turnos verifica as condicoes de vitoria e muda o turno(Jogador)
+    //Ao fim dos turnos verifica as condicoes de vitoria, preenche a variavel ganhador com o player caso haja ganhador e caso não haja ganhador muda o turno(Jogador)
     let somaLinha=0;
     let somaColuna=0;
     let somaDiagonal0=0;
