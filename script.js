@@ -46,7 +46,9 @@ function capturaDadosForm(e){
           iniciar();
         }
         else{
-          mensagemDeErro("Não disponível!");
+          // mensagemDeErro("Não disponível!");
+          document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
+          iniciar();
         }
       }
       else{
