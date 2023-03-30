@@ -1,16 +1,17 @@
-
 var velha = [[0, 0, 0],
              [0, 0, 0],
              [0, 0, 0]]
 var jogada = 0;
 var jogador = 0;
 var ganhador = 0;
+var estruturaVitoria = null;
+
 var player1 = "";
 var player2 = "";
 var modo = "";
 var dificuldade = "";
+
 var espera = null;
-var estruturaVitoria = null;
 
 
 
