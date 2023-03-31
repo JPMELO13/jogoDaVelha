@@ -61,7 +61,6 @@ function capturaDadosForm(e){
 }
 
 window.onload = function () {
-  document.getElementById("reiniciar__botao").addEventListener("click", reiniciar)
   var gameMode = form.switchMode;
   for(let i=0;i<gameMode.length;i++){
     gameMode[i].onclick = function(){
@@ -75,7 +74,6 @@ window.onload = function () {
         botaoJogar[0].remove();
       }      
       form.insertAdjacentHTML("beforeend", "<div class='player__field'><span class='player__icon'>&#10005 </span><input type='text' class='player__input' name='player1' placeholder='Player1'></div>");
-      
       if (modo=="single"){
         player2="BOT";
         form.insertAdjacentHTML("beforeend", "<div class='player__field'><div class='switch-field'><input type='radio' id='radio-facil' name='dificuldade' value='facil' ><label for='radio-facil'>Fácil</label><input type='radio' id='radio-dif' name='dificuldade' value='impossivel'><label for='radio-dif'>Impossível</label></div></div>");
@@ -88,6 +86,6 @@ window.onload = function () {
       form.insertAdjacentHTML("beforeend", "<button class='botao jogar' type='submit'>Jogar</button>");
     }
   }
-  
-  form.addEventListener('submit', capturaDadosForm)
+  form.addEventListener('submit', capturaDadosForm);
+  document.getElementById("reiniciar__botao").addEventListener("click", reiniciar);
 };

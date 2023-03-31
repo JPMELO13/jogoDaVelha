@@ -14,17 +14,23 @@ var dificuldade = "";
 var espera = null;
 
 
-
-function sorteiaPrimeiroJogador(){
+/**
+ * Função que sorteia um jogador e retorna 1 para player1 e -1 para player2. 
+ * @param player1 String que nomeia player1.
+ * @param player2 String que nomeia player2.
+ */
+function sorteiaJogador(player1, player2){
+  let jogadorSorteado = 0;
   let x = Math.random();
   if(x>0.5){
-    jogador = -1;
+    jogadorSorteado = -1;
     document.getElementById("titulo").innerHTML="Vez de "+player2
   }
   else{
-    jogador = 1;
+    jogadorSorteado = 1;
     document.getElementById("titulo").innerHTML="Vez de "+player1
   }
+  return jogadorSorteado;
 }
 
 function mudarJogador() {
@@ -62,7 +68,7 @@ function iniciar() {
   ganhador = 0;
   jogada = 0;
   estruturaVitoria=null;
-  sorteiaPrimeiroJogador();
+  jogador = sorteiaJogador(player1,player2);
   if ((jogador == -1)&&(modo == "single")){
     botJogar(); 
   }
@@ -96,7 +102,7 @@ function cliqueBotao(obj){
     idMod = parseInt(obj.target.id.substr(-1))
     // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
     velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.target.value)
-    if(verificarVitoria(idMod, true)){
+    if(verificarVitoria(idMod,velha, true)){
       terminar();
       destacarFinal(idMod)
     }
@@ -136,10 +142,24 @@ function botJogar(){
     }
   }
   else if (dificuldade=="impossivel"){
+    let botoesDisponiveis = new Map();
+
     botaoEscolhido=0;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (velha[i][j] == 0){
+          botoesDisponiveis.set((i*3+j),0)
+        }
+      }
+    }
+    botoesDisponiveis.forEach((value, key)=>{
+      console.log(key); 
+    })
+    
     while (velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido%3] != 0){
       botaoEscolhido ++ ;
-    } 
+    }
+    console.log(botoesDisponiveis);
   }
   let botoes = document.querySelectorAll(".botoes");
   let obj=botoes[botaoEscolhido];
@@ -151,7 +171,7 @@ function botJogar(){
       idMod = parseInt(obj.id.slice(-1));
       // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
       velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.value);
-      if(verificarVitoria(idMod, true)){
+      if(verificarVitoria(idMod,velha, true)){
         terminar();
         destacarFinal(idMod);
       }
@@ -161,6 +181,60 @@ function botJogar(){
     }, 500);
   }
 }
+
+// function minimax(matrizDisponivel, player) {
+  
+//   if (verificarVitoria(id)) {
+//       return {
+//           score: -10
+//       };
+//   } else if (winning(reboard, aiPlayer)) {
+//       return {
+//           score: 10
+//       };
+//   } else if (array.length === 0) {
+//       return {
+//           score: 0
+//       };
+//   }
+
+//   var moves = [];
+//   for (var i = 0; i < matrizDisponivel.length; i++) {
+//       var move = {};
+//       move.index = reboard[array[i]];
+//       reboard[array[i]] = player;
+
+//       if (player == aiPlayer) {
+//           var g = minimax(reboard, huPlayer);
+//           move.score = g.score;
+//       } else {
+//           var g = minimax(reboard, aiPlayer);
+//           move.score = g.score;
+//       }
+//       reboard[array[i]] = move.index;
+//       moves.push(move);
+//   }
+
+//   var bestMove;
+//   if (player === aiPlayer) {
+//       var bestScore = -10000;
+//       for (var i = 0; i < moves.length; i++) {
+//           if (moves[i].score > bestScore) {
+//               bestScore = moves[i].score;
+//               bestMove = i;
+//           }
+//       }
+//   } else {
+//       var bestScore = 10000;
+//       for (var i = 0; i < moves.length; i++) {
+//           if (moves[i].score < bestScore) {
+//               bestScore = moves[i].score;
+//               bestMove = i;
+//           }
+//       }
+//   }
+//   return moves[bestMove];
+// }
 
 function verificaSomaAlinhada(valor, estrutura){
   //retorna a posição da estrutura onde deve ser jogado
@@ -204,9 +278,10 @@ function verificaSomaAlinhada(valor, estrutura){
  * Função que verifica se a condicao de vitoria foi atingida, podendo alterar ou não as variáveis ganhador e estruturaVitoria.
  * OBS: Empate na ultima rodada é tido como uma vitória sem ganhador.
  * @param id O id do botão da jogada a ser verificada.
+ * @param matriz Matriz que representa o tabuleiro na qual será verificada a vitória
  * @param global Um booleano que indica, caso positivo, se a função alterará globalmente as variáveis ganhador e estruturaVitoria.
  */
-function verificarVitoria(id, global){
+function verificarVitoria(id,matriz, global){
   let resultado = false;
   if (jogada>3){
     //Ao fim dos turnos verifica as condicoes de vitoria, preenche a variavel ganhador com o player caso haja ganhador e retorna true
@@ -215,17 +290,17 @@ function verificarVitoria(id, global){
     let somaDiagonal0=0;
     let somaDiagonal2=0;
     for(let i=0;i<3;i++){
-      somaLinha+=velha[Math.floor(id / 3)][i]
-      somaColuna+=velha[i][id%3]
+      somaLinha+=matriz[Math.floor(id / 3)][i]
+      somaColuna+=matriz[i][id%3]
       if (id==4){
-        somaDiagonal0 += velha[i][i];
-        somaDiagonal2 += velha[i][2-i]
+        somaDiagonal0 += matriz[i][i];
+        somaDiagonal2 += matriz[i][2-i]
       }
       else if (id%8==0){
-        somaDiagonal0 += velha[i][i];
+        somaDiagonal0 += matriz[i][i];
       }
       else if (id%2==0){
-        somaDiagonal2 += velha[i][2-i];
+        somaDiagonal2 += matriz[i][2-i];
       }
     }
     if(somaDiagonal0 == (3*jogador)){
