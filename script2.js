@@ -8,15 +8,8 @@ var jogoPrincipal = {
     jogador: 0,
     ganhador: 0,
     estruturaVitoria: null,
+    principal : false
 };
-
-// var velha = [[0, 0, 0],
-//              [0, 0, 0],
-//              [0, 0, 0]]
-// var jogada = 0;
-// var jogador = 0;
-// var ganhador = 0;
-// var estruturaVitoria = null;
 
 var player1 = "";
 var player2 = "";
@@ -46,10 +39,8 @@ function verificarNomesIguais(nome1, nome2){
 
 /**
  * Função que sorteia um jogador, escreve no título a vez do jogador e retorna 1 para player1 e -1 para player2. 
- * @param player1 String que nomeia player1.
- * @param player2 String que nomeia player2.
  */
-function sorteiaJogador(player1, player2){
+function sorteiaJogador(){
     let jogadorSorteado = 0;
     let x = Math.random();
     if(x>0.5){
@@ -76,7 +67,7 @@ function sorteiaJogador(player1, player2){
     if (modo=="single"){
       if (jogo.jogador==-1){
         removeListenerBotoes();
-        botJogar(jogoPrincipal);
+        botJogar(jogo);
       }
       else{
         addListenerBotoes0();
@@ -98,9 +89,10 @@ function sorteiaJogador(player1, player2){
     jogo.ganhador = 0;
     jogo.jogada = 0;
     jogo.estruturaVitoria=null;
-    jogo.jogador = sorteiaJogador(player1,player2);
+    jogo.principal=true;
+    jogo.jogador = sorteiaJogador();
     if ((jogo.jogador == -1)&&(modo == "single")){
-      botJogar(jogoPrincipal); 
+      botJogar(jogo); 
     }
     else{
       addListenerBotoes0();
@@ -186,30 +178,41 @@ function sorteiaJogador(player1, player2){
         console.log(key); 
       })
       
-      while (velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido%3] != 0){
+      while (jogo.velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido%3] != 0){
         botaoEscolhido ++ ;
       }
       console.log(botoesDisponiveis);
     }
-    let botoes = document.querySelectorAll(".botoes");
-    let obj=botoes[botaoEscolhido];
-    if (obj.value == "0" && jogo.ganhador == 0) {
-      obj.classList.remove("selecionavel")
-      obj.value = jogo.jogador;
-      espera = setTimeout(() => {
-        obj.innerHTML = "&#9711" 
-        idMod = parseInt(obj.id.slice(-1));
-        // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
-        jogo.velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.value);
-        if(verificarVitoria(jogoPrincipal, idMod)){
-          terminar();
-          destacarFinal(idMod);
-        }
-        else{
-          mudarJogador(jogoPrincipal);
-        }
-      }, 500);
+    jogo.velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido % 3] = jogo.jogador;
+    if (jogo.principal){
+      let botoes = document.querySelectorAll(".botoes");
+      let obj=botoes[botaoEscolhido];
+      if (obj.value == "0" && jogo.ganhador == 0) {
+        obj.classList.remove("selecionavel")
+        obj.value = jogo.jogador;
+        esperarParaMarcar(obj).then(()=>{
+          if(verificarVitoria(jogo, botaoEscolhido)){
+            terminar();
+            destacarFinal(botaoEscolhido);
+          }
+          else{
+            mudarJogador(jogo);
+          }
+        })
+
+      }
+
     }
+    
+  }
+
+  function esperarParaMarcar(obj){
+    return new Promise(resolve =>{
+      espera =setTimeout(()=>{
+        obj.innerHTML = "&#9711";
+        resolve();
+      }, 500);
+    });
   }
   
   // function minimax(matrizDisponivel, player) {
