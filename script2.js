@@ -1,6 +1,6 @@
 const form = document.getElementById('form_players');
 
-let jogoPrincipal = {
+var jogoPrincipal = {
     velha: [[0, 0, 0],
             [0, 0, 0],
             [0, 0, 0]],
@@ -8,7 +8,7 @@ let jogoPrincipal = {
     jogador: 0,
     ganhador: 0,
     estruturaVitoria: null,
-  };
+};
 
 // var velha = [[0, 0, 0],
 //              [0, 0, 0],
