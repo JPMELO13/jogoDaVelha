@@ -1,6 +1,6 @@
 const form = document.getElementById('form_players');
 
-let pessoa = {
+let jogoPrincipal = {
     velha: [[0, 0, 0],
             [0, 0, 0],
             [0, 0, 0]],
@@ -63,20 +63,20 @@ function sorteiaJogador(player1, player2){
     return jogadorSorteado;
   }
   
-  function mudarJogador() {
+  function mudarJogador(jogo) {
     // multiplicação por -1 faz o jogador "atual" alternar em -1 e 1. Função altera exibição do turno
-    jogador = jogador * -1;
-    if (jogador == 1){
+    jogo.jogador = jogo.jogador * -1;
+    if (jogo.jogador == 1){
       document.getElementById("titulo").innerHTML="Vez de "+player1
     }
     else{
       document.getElementById("titulo").innerHTML="Vez de "+player2
     }
-    jogada ++;
+    jogo.jogada ++;
     if (modo=="single"){
-      if (jogador==-1){
+      if (jogo.jogador==-1){
         removeListenerBotoes();
-        botJogar();
+        botJogar(jogoPrincipal);
       }
       else{
         addListenerBotoes0();
@@ -84,23 +84,23 @@ function sorteiaJogador(player1, player2){
     }
   }
   
-  function iniciar() {
+  function iniciar(jogo) {
     document.getElementById("titulo").classList.remove("destaque_titulo");
     let botoes = document.querySelectorAll(".botoes");
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
-        velha[i][j] = 0;
+        jogo.velha[i][j] = 0;
         botoes[3 * i + j].innerHTML = "";
         botoes[3 * i + j].value = "0";
         botoes[3 * i + j].classList.remove("destaque__vitoria")
       }
     }
-    ganhador = 0;
-    jogada = 0;
-    estruturaVitoria=null;
-    jogador = sorteiaJogador(player1,player2);
-    if ((jogador == -1)&&(modo == "single")){
-      botJogar(); 
+    jogo.ganhador = 0;
+    jogo.jogada = 0;
+    jogo.estruturaVitoria=null;
+    jogo.jogador = sorteiaJogador(player1,player2);
+    if ((jogo.jogador == -1)&&(modo == "single")){
+      botJogar(jogoPrincipal); 
     }
     else{
       addListenerBotoes0();
@@ -112,7 +112,7 @@ function sorteiaJogador(player1, player2){
     //2 laços for para percorrer matriz 3x3 para aplicar a classe selecionavel e "escutar" cliques de todos botões
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
-        if(velha[i][j]==0){
+        if(jogoPrincipal.velha[i][j]==0){
           botoes[3 * i + j].classList.add("selecionavel");
           botoes[3 * i + j].addEventListener("click", cliqueBotao);
         }
@@ -121,38 +121,38 @@ function sorteiaJogador(player1, player2){
   }
   
   function cliqueBotao(obj){
-    if (obj.target.value == "0" && ganhador == 0) {
+    if (obj.target.value == "0" && jogoPrincipal.ganhador == 0) {
       obj.target.classList.remove("selecionavel")
-      obj.target.value = jogador;
-      if (jogador == 1) {
+      obj.target.value = jogoPrincipal.jogador;
+      if (jogoPrincipal.jogador == 1) {
         obj.target.innerHTML = "&#10005"
-      } else if (jogador == -1) {
+      } else if (jogoPrincipal.jogador == -1) {
         obj.target.innerHTML = "&#9711"
       }
       idMod = parseInt(obj.target.id.substr(-1))
       // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
-      velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.target.value)
-      if(verificarVitoria(idMod,velha, true)){
+      jogoPrincipal.velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.target.value)
+      if(verificarVitoria(jogoPrincipal, idMod)){
         terminar();
         destacarFinal(idMod)
       }
       else{
-        mudarJogador();
+        mudarJogador(jogoPrincipal);
       }
     }
   }
   
-  function botJogar(){
+  function botJogar(jogo){
     let botaoEscolhido;
     if (dificuldade=="facil"){
       //soma diagonal ou linha ou coluna for igual a - 2 ele joga alinhado(+prioridade)
       //soma diagonal ou linha ou coluna for igual a 2 ele joga alinhado(-prioridade)
-      let ganhaLinha = verificaSomaAlinhada(-2, "linha");
-      let ganhaColuna = verificaSomaAlinhada(-2, "coluna");
-      let ganhaDiagonal = verificaSomaAlinhada(-2, "diagonal");
-      let bloqLinha = verificaSomaAlinhada(2, "linha");
-      let bloqColuna = verificaSomaAlinhada(2, "coluna");
-      let bloqDiagonal = verificaSomaAlinhada(2, "diagonal");
+      let ganhaLinha = verificaSomaAlinhada(jogo.velha, -2, "linha");
+      let ganhaColuna = verificaSomaAlinhada(jogo.velha, -2, "coluna");
+      let ganhaDiagonal = verificaSomaAlinhada(jogo.velha, -2, "diagonal");
+      let bloqLinha = verificaSomaAlinhada(jogo.velha, 2, "linha");
+      let bloqColuna = verificaSomaAlinhada(jogo.velha, 2, "coluna");
+      let bloqDiagonal = verificaSomaAlinhada(jogo.velha, 2, "diagonal");
       if(ganhaLinha>-1){
         botaoEscolhido=ganhaLinha;
       }else if(ganhaColuna>-1){
@@ -168,7 +168,7 @@ function sorteiaJogador(player1, player2){
       }else{
         do{
           botaoEscolhido = Math.floor(Math.random() * 9);
-        }while (velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido%3] != 0)
+        }while (jogo.velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido%3] != 0)
       }
     }
     else if (dificuldade=="impossivel"){
@@ -177,7 +177,7 @@ function sorteiaJogador(player1, player2){
       botaoEscolhido=0;
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-          if (velha[i][j] == 0){
+          if (jogo.velha[i][j] == 0){
             botoesDisponiveis.set((i*3+j),0)
           }
         }
@@ -193,20 +193,20 @@ function sorteiaJogador(player1, player2){
     }
     let botoes = document.querySelectorAll(".botoes");
     let obj=botoes[botaoEscolhido];
-    if (obj.value == "0" && ganhador == 0) {
+    if (obj.value == "0" && jogo.ganhador == 0) {
       obj.classList.remove("selecionavel")
-      obj.value = jogador;
+      obj.value = jogo.jogador;
       espera = setTimeout(() => {
         obj.innerHTML = "&#9711" 
         idMod = parseInt(obj.id.slice(-1));
         // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
-        velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.value);
-        if(verificarVitoria(idMod,velha, true)){
+        jogo.velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.value);
+        if(verificarVitoria(jogoPrincipal, idMod)){
           terminar();
           destacarFinal(idMod);
         }
         else{
-          mudarJogador();
+          mudarJogador(jogoPrincipal);
         }
       }, 500);
     }
@@ -266,36 +266,36 @@ function sorteiaJogador(player1, player2){
   //   return moves[bestMove];
   // }
   
-  function verificaSomaAlinhada(valor, estrutura){
+  function verificaSomaAlinhada(matriz, valor, estrutura){
     //retorna a posição da estrutura onde deve ser jogado
     for (let i=0; i<3;i++){
       if(estrutura=="linha"){
-        if((velha[i][0]+velha[i][1]+velha[i][2]) == valor){
+        if((matriz[i][0]+matriz[i][1]+matriz[i][2]) == valor){
           for(let j=0;j<3;j++){
-            if (velha[i][j] ==0){
+            if (matriz[i][j] ==0){
               return (i*3+j);
             }
           }
         }
       }
       else if(estrutura=="coluna"){
-        if((velha[0][i]+velha[1][i]+velha[2][i]) == valor){
+        if((matriz[0][i]+matriz[1][i]+matriz[2][i]) == valor){
           for(let j=0;j<3;j++){
-            if (velha[j][i] ==0){
+            if (matriz[j][i] ==0){
               return (j*3+i);
             }
           }
         }
       }
       else if((estrutura=="diagonal")&&(i!=1)){
-        if ((velha[0][i]+velha[1][1]+velha[2][2-i])==valor){
-          if (velha[0][i]==0){
+        if ((matriz[0][i]+matriz[1][1]+matriz[2][2-i])==valor){
+          if (matriz[0][i]==0){
             return i;
           }
-          else if (velha[1][1]==0){
+          else if (matriz[1][1]==0){
             return 4;
           }
-          else if (velha[2][2-i]==0){
+          else if (matriz[2][2-i]==0){
             return 6+(2-i);
           }
         } 
@@ -309,62 +309,51 @@ function sorteiaJogador(player1, player2){
    * OBS: Empate na ultima rodada é tido como uma vitória sem ganhador.
    * @param id O id do botão da jogada a ser verificada.
    * @param matriz Matriz que representa o tabuleiro na qual será verificada a vitória
-   * @param global Um booleano que indica, caso positivo, se a função alterará globalmente as variáveis ganhador e estruturaVitoria.
    */
-  function verificarVitoria(id,matriz, global){
+  function verificarVitoria(jogo,id){
     let resultado = false;
-    if (jogada>3){
+    if (jogo.jogada>3){
       //Ao fim dos turnos verifica as condicoes de vitoria, preenche a variavel ganhador com o player caso haja ganhador e retorna true
       let somaLinha=0;
       let somaColuna=0;
       let somaDiagonal0=0;
       let somaDiagonal2=0;
       for(let i=0;i<3;i++){
-        somaLinha+=matriz[Math.floor(id / 3)][i]
-        somaColuna+=matriz[i][id%3]
+        somaLinha+=jogo.velha[Math.floor(id / 3)][i]
+        somaColuna+=jogo.velha[i][id%3]
         if (id==4){
-          somaDiagonal0 += matriz[i][i];
-          somaDiagonal2 += matriz[i][2-i]
+          somaDiagonal0 += jogo.velha[i][i];
+          somaDiagonal2 += jogo.velha[i][2-i]
         }
         else if (id%8==0){
-          somaDiagonal0 += matriz[i][i];
+          somaDiagonal0 += jogo.velha[i][i];
         }
         else if (id%2==0){
-          somaDiagonal2 += matriz[i][2-i];
+          somaDiagonal2 += jogo.velha[i][2-i];
         }
       }
-      if(somaDiagonal0 == (3*jogador)){
-        if(global){
-          ganhador = jogador;
-          estruturaVitoria = "diagonal0"
-        }
+      if(somaDiagonal0 == (3*jogo.jogador)){
+        jogo.ganhador = jogo.jogador;
+        jogo.estruturaVitoria = "diagonal0"
         resultado = true;
       }
-      else if(somaDiagonal2 == (3*jogador)){
-        if(global){
-          ganhador = jogador;
-          estruturaVitoria = "diagonal2"
-        }
+      else if(somaDiagonal2 == (3*jogo.jogador)){
+        jogo.ganhador = jogo.jogador;
+        jogo.estruturaVitoria = "diagonal2"
         resultado = true;
       }
-      else if (somaLinha == (3*jogador)){
-        if(global){
-          ganhador = jogador;
-          estruturaVitoria = "linha"
-        }
+      else if (somaLinha == (3*jogo.jogador)){
+        jogo.ganhador = jogo.jogador;
+        jogo.estruturaVitoria = "linha"
         resultado = true;
       }
-      else if (somaColuna == (3*jogador)){
-        if(global){
-          ganhador = jogador;
-          estruturaVitoria = "coluna"
-        }
+      else if (somaColuna == (3*jogo.jogador)){
+          jogo.ganhador = jogo.jogador;
+          jogo.estruturaVitoria = "coluna"
         resultado = true;
       }
-      else if(jogada==8){
-        if(global){
-        estruturaVitoria = "empate";
-        }
+      else if(jogo.jogada==8){
+        jogo.estruturaVitoria = "empate";
         resultado =true;
       }
     }
@@ -372,25 +361,25 @@ function sorteiaJogador(player1, player2){
   }
   
   function destacarFinal(id){
-    if (ganhador == 1) {
+    if (jogoPrincipal.ganhador == 1) {
       document.getElementById("titulo").innerText = player1 + " venceu!";
     }
-    else if (ganhador == -1) {
+    else if (jogoPrincipal.ganhador == -1) {
       document.getElementById("titulo").innerText = player2 + " venceu!";
     }
-    if (estruturaVitoria=="diagonal0"){
+    if (jogoPrincipal.estruturaVitoria=="diagonal0"){
       destacarDiagonal(0);
     }
-    else if(estruturaVitoria=="diagonal2"){
+    else if(jogoPrincipal.estruturaVitoria=="diagonal2"){
       destacarDiagonal(2);
     }
-    else if(estruturaVitoria=="linha"){
+    else if(jogoPrincipal.estruturaVitoria=="linha"){
       destacarLinha(id);
     }
-    else if(estruturaVitoria =="coluna"){
+    else if(jogoPrincipal.estruturaVitoria =="coluna"){
       destacarColuna(id);
     }
-    else if(estruturaVitoria= "empate"){
+    else if(jogoPrincipal.estruturaVitoria= "empate"){
       destacarColuna(0);
       destacarColuna(1);
       destacarColuna(2);
@@ -436,7 +425,7 @@ function sorteiaJogador(player1, player2){
   
   function reiniciar() {
     terminar();
-    iniciar();
+    iniciar(jogoPrincipal);
   }
 
 function mensagemDeErro(mensagem){
@@ -466,12 +455,12 @@ function capturaDadosForm(e){
       if(!((modo=="single")&&(dificuldade==""))){
         if(!((modo=="single")&&(dificuldade=="impossivel"))){
           document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
-          iniciar();
+          iniciar(jogoPrincipal);
         }
         else{
           // mensagemDeErro("Não disponível!");
           document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
-          iniciar();
+          iniciar(jogoPrincipal);
         }
       }
       else{
