@@ -14,8 +14,10 @@ var dificuldade = "";
 var espera = null;
 
 
+
+
 /**
- * Função que sorteia um jogador e retorna 1 para player1 e -1 para player2. 
+ * Função que sorteia um jogador, escreve no título a vez do jogador e retorna 1 para player1 e -1 para player2. 
  * @param player1 String que nomeia player1.
  * @param player2 String que nomeia player2.
  */
