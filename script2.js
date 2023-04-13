@@ -276,6 +276,14 @@ function esperarParaMarcar(obj) {
 //   return moves[bestMove];
 // }
 
+
+/**
+ * Função que verifica na matriz, se há a estrutura que possua a soma esperada.
+ * Retorna a posição da casa não preenchida presente na estrutura que tenha a soma esperada. Caso não encontre, retorna -1.
+ * @param matriz Objeto contendo o jogo no qual o bot vai executar a jogada.
+ * @param valor Objeto contendo o jogo no qual o bot vai executar a jogada.
+ * @param estrutura Objeto contendo o jogo no qual o bot vai executar a jogada.
+ */
 function verificaSomaAlinhada(matriz, valor, estrutura) {
   //retorna a posição da estrutura onde deve ser jogado
   for (let i = 0; i < 3; i++) {
