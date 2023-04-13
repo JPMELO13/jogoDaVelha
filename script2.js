@@ -202,6 +202,10 @@ function sorteiaJogador(){
 
       }
 
+    }else{
+      if(!(verificarVitoria(jogo, botaoEscolhido))){
+        mudarJogador(jogo);
+      }
     }
     
   }
