@@ -176,7 +176,27 @@ function botJogar(jogo) {
     }
   }
   else if (dificuldade == "impossivel") {
-    
+    let melhorValor = Number.POSITIVE_INFINITY;
+    let melhorMovimento;
+
+    for (let i = 0; i < jogo.velha.length; i++) {
+      for (let j = 0; j < jogo.velha[i].length; j++) {
+        if (jogo.velha[i][j] === 0) {
+          const novoJogo=cloneDeep(jogo);
+          novoJogo.jogador*=-1;
+          novoJogo.jogada+=1;
+          novoJogo.velha[i][j] = -1;
+          const valorMovimento = minimax(novoJogo, 5, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY);
+          // jogo.velha[i][j] = 0;
+  
+          if (valorMovimento < melhorValor) {
+            melhorValor = valorMovimento;
+            melhorMovimento = 3*i+j;
+          }
+        }
+      }
+    }
+    botaoEscolhido=melhorMovimento;
   }
 
   jogo.velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido % 3] = jogo.jogador;
@@ -239,6 +259,57 @@ function jogadasPossiveis(velha) {
 // function minimax(jogo, profundidade) {
 //   // Usar cloneDeep e jogadas possíveis, além dos demais estados que já existem no jogo e retornar o botão escolhido para o bot marcar no modo impossível
 // }
+
+// function minimax(tabuleiro, profundidade, jogadorMaximizador, alpha, beta) {
+function minimax(jogo, profundidade, alpha, beta) {
+  if (verificarVitoria(jogo) === true || profundidade === 0) {
+    return (jogo.ganhador*10);
+  }
+
+  if (jogo.jogador === 1) {
+    let maxEval = Number.NEGATIVE_INFINITY;
+    for (let i = 0; i < jogo.velha.length; i++) {
+      for (let j = 0; j < jogo.velha[i].length; j++) {
+        if (jogo.velha[i][j] === 0) {
+          const novoJogo=cloneDeep(jogo);
+          novoJogo.jogador*=-1;
+          novoJogo.jogada+=1;
+          novoJogo.velha[i][j] = 1;
+          const eval = minimax(novoJogo, profundidade - 1, alpha, beta);
+          // jogo.velha[i][j] = 0;
+
+          maxEval = Math.max(maxEval, eval);
+          alpha = Math.max(alpha, eval);
+          if (beta <= alpha) {
+            break;
+          }
+        }
+      }
+    }
+    return maxEval;
+  } else {
+    let minEval = Number.POSITIVE_INFINITY;
+    for (let i = 0; i < jogo.velha.length; i++) {
+      for (let j = 0; j < jogo.velha[i].length; j++) {
+        if (jogo.velha[i][j] === 0) {
+          const novoJogo=cloneDeep(jogo);
+          novoJogo.jogador*=-1;
+          novoJogo.jogada+=1;
+          novoJogo.velha[i][j] = -1;
+          const eval = minimax(novoJogo, profundidade - 1, alpha, beta);
+          // jogo.velha[i][j] = '';
+
+          minEval = Math.min(minEval, eval);
+          beta = Math.min(beta, eval);
+          if (beta <= alpha) {
+            break;
+          }
+        }
+      }
+    }
+    return minEval;
+  }
+}
   
 
 
@@ -462,9 +533,9 @@ function capturaDadosForm(e) {
         iniciar(jogoPrincipal);
       }
       else {
-        mensagemDeErro("Não disponível!");
-        // document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
-        // iniciar(jogoPrincipal);
+        // mensagemDeErro("Não disponível!");
+        document.getElementsByClassName("modal")[0].classList.add("modal__concluido");
+        iniciar(jogoPrincipal);
       }
     }
     else {
