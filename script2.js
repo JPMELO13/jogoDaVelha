@@ -183,12 +183,12 @@ function botJogar(jogo) {
       for (let j = 0; j < jogo.velha[i].length; j++) {
         if (jogo.velha[i][j] === 0) {
           const novoJogo=cloneDeep(jogo);
+          console.log(novoJogo.velha);
           novoJogo.jogador*=-1;
           novoJogo.jogada+=1;
           novoJogo.velha[i][j] = -1;
-          const valorMovimento = minimax(novoJogo, 5, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY);
-          // jogo.velha[i][j] = 0;
-  
+          const valorMovimento = minimax(novoJogo, 9, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
+          console.log(valorMovimento);
           if (valorMovimento < melhorValor) {
             melhorValor = valorMovimento;
             melhorMovimento = 3*i+j;
@@ -217,11 +217,12 @@ function botJogar(jogo) {
       })
     }
 
-  } else {
-    if (!(verificarVitoria(jogo, botaoEscolhido))) {
-      mudarJogador(jogo);
-    }
-  }
+  } 
+  // else {
+  //   if (!(verificarVitoria(jogo, botaoEscolhido))) {
+  //     mudarJogador(jogo);
+  //   }
+  // }
 }
 
 function cloneDeep(value) {
@@ -263,10 +264,20 @@ function jogadasPossiveis(velha) {
 // function minimax(tabuleiro, profundidade, jogadorMaximizador, alpha, beta) {
 function minimax(jogo, profundidade, alpha, beta) {
   if (verificarVitoria(jogo) === true || profundidade === 0) {
-    return (jogo.ganhador*10);
+    if(jogo.estruturaVitoria=="empate"){
+      return 0
+    }else{
+      if (jogo.ganhador != 0){
+        return (jogo.ganhador*(10+profundidade));
+      }
+      else{
+        return 0;
+      }
+    }
+    
   }
 
-  if (jogo.jogador === 1) {
+  if (jogo.jogador == 1) {
     let maxEval = Number.NEGATIVE_INFINITY;
     for (let i = 0; i < jogo.velha.length; i++) {
       for (let j = 0; j < jogo.velha[i].length; j++) {
@@ -279,7 +290,7 @@ function minimax(jogo, profundidade, alpha, beta) {
           // jogo.velha[i][j] = 0;
 
           maxEval = Math.max(maxEval, eval);
-          alpha = Math.max(alpha, eval);
+          alpha = Math.max(alpha, maxEval);
           if (beta <= alpha) {
             break;
           }
@@ -288,26 +299,29 @@ function minimax(jogo, profundidade, alpha, beta) {
     }
     return maxEval;
   } else {
-    let minEval = Number.POSITIVE_INFINITY;
-    for (let i = 0; i < jogo.velha.length; i++) {
-      for (let j = 0; j < jogo.velha[i].length; j++) {
-        if (jogo.velha[i][j] === 0) {
-          const novoJogo=cloneDeep(jogo);
-          novoJogo.jogador*=-1;
-          novoJogo.jogada+=1;
-          novoJogo.velha[i][j] = -1;
-          const eval = minimax(novoJogo, profundidade - 1, alpha, beta);
-          // jogo.velha[i][j] = '';
+    if(jogo.jogador == -1){
+      let minEval = Number.POSITIVE_INFINITY;
+      for (let i = 0; i < jogo.velha.length; i++) {
+        for (let j = 0; j < jogo.velha[i].length; j++) {
+          if (jogo.velha[i][j] === 0) {
+            const novoJogo=cloneDeep(jogo);
+            novoJogo.jogador*=-1;
+            novoJogo.jogada+=1;
+            novoJogo.velha[i][j] = -1;
+            const eval = minimax(novoJogo, profundidade - 1, alpha, beta);
+            // jogo.velha[i][j] = '';
 
-          minEval = Math.min(minEval, eval);
-          beta = Math.min(beta, eval);
-          if (beta <= alpha) {
-            break;
+            minEval = Math.min(minEval, eval);
+            beta = Math.min(beta, minEval);
+            if (beta <= alpha) {
+              break;
+            }
           }
         }
       }
+      return minEval;
     }
-    return minEval;
+    
   }
 }
   
