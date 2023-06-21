@@ -178,6 +178,7 @@ function botJogar(jogo) {
   else if (dificuldade == "impossivel") {
     let melhorValor = Number.POSITIVE_INFINITY;
     let melhorMovimento;
+    //test
 
     for (let i = 0; i < jogo.velha.length; i++) {
       for (let j = 0; j < jogo.velha[i].length; j++) {
