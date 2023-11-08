@@ -19,10 +19,6 @@ var dificuldade = "";
 
 var espera = null;
 
-var teste = 0;
-
-
-
 function mudarTema(destaque, secundaria, fundo, hover) {
   //passando codigos hex das cores por parâmetro é alterada no arquivo css
   document.documentElement.style.setProperty('--cor-destaque', destaque);
@@ -38,7 +34,6 @@ function verificarNomesIguais(nome1, nome2) {
   }
   return resultado;
 }
-
 
 /**
  * Função que sorteia um jogador, escreve no título a vez do jogador e retorna 1 para player1 e -1 para player2. 
@@ -143,7 +138,7 @@ function cliqueBotao(obj) {
 /**
  * Função que preenche uma casa do tabuleiro com a jogada do bot após analisar todas estruturas do tabuleiro, de forma que, primeiramente, tentará vencer caso haja apenas duas casas preenchidas pelo bot em uma estrutura e, secundariamente, bloqueará a vitória caso haja apenas duas casas preenchidas pelo player em uma estrutura.
  * Caso essas condições não sejam atendidas, o bot jogará aleatoriamente em uma das casas disponíveis.
- * OBS: Há a avaliação se o jogo é o principal, para preenchimento da jogada na tela(com delay)e verificação da vitória para encerramento do jogo pós jogada.  
+ * OBS: Há a verificação se o jogo é o principal, para preenchimento da jogada na tela(com delay)e verificação da vitória para encerramento do jogo pós jogada.  
  * @param jogo Objeto contendo o jogo no qual o bot vai executar a jogada.
  */
 function botJogar(jogo) {
@@ -176,28 +171,7 @@ function botJogar(jogo) {
     }
   }
   else if (dificuldade == "impossivel") {
-    let melhorValor = Number.POSITIVE_INFINITY;
-    let melhorMovimento;
-    //test
-
-    for (let i = 0; i < jogo.velha.length; i++) {
-      for (let j = 0; j < jogo.velha[i].length; j++) {
-        if (jogo.velha[i][j] === 0) {
-          const novoJogo=cloneDeep(jogo);
-          console.log(novoJogo.velha);
-          novoJogo.jogador*=-1;
-          novoJogo.jogada+=1;
-          novoJogo.velha[i][j] = -1;
-          const valorMovimento = minimax(novoJogo, 9, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
-          console.log(valorMovimento);
-          if (valorMovimento < melhorValor) {
-            melhorValor = valorMovimento;
-            melhorMovimento = 3*i+j;
-          }
-        }
-      }
-    }
-    botaoEscolhido=melhorMovimento;
+    // ESCREVER PARTE FALTANTE AQUI E DEFINIR FUNÇÃO COM ALGORITMO MINIMAX FORA(COM PODA ALFA BETA)
   }
 
   jogo.velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido % 3] = jogo.jogador;
@@ -217,116 +191,8 @@ function botJogar(jogo) {
         }
       })
     }
-
-  } 
-  // else {
-  //   if (!(verificarVitoria(jogo, botaoEscolhido))) {
-  //     mudarJogador(jogo);
-  //   }
-  // }
-}
-
-function cloneDeep(value) {
-  if (typeof value !== 'object' || value === null) {
-    return value;
-  }
-
-  if (Array.isArray(value)) {
-    return value.map(cloneDeep);
-  }
-
-  const result = {};
-  for (const key in value) {
-    result[key] = cloneDeep(value[key]);
-  }
-
-  return result;
-}
-
-function jogadasPossiveis(velha) {
-  let jogadas = [];
-
-  for (let linha = 0; linha < 3; linha++) {
-    for(let coluna=0; coluna<3;coluna++){
-      if (velha[linha][coluna] == 0) {
-        jogadas.push((linha*3)+coluna);
-      }
-    }
-
-  }
-
-  return jogadas;
-}
-
-// function minimax(jogo, profundidade) {
-//   // Usar cloneDeep e jogadas possíveis, além dos demais estados que já existem no jogo e retornar o botão escolhido para o bot marcar no modo impossível
-// }
-
-// function minimax(tabuleiro, profundidade, jogadorMaximizador, alpha, beta) {
-function minimax(jogo, profundidade, alpha, beta) {
-  if (verificarVitoria(jogo) === true || profundidade === 0) {
-    if(jogo.estruturaVitoria=="empate"){
-      return 0
-    }else{
-      if (jogo.ganhador != 0){
-        return (jogo.ganhador*(10+profundidade));
-      }
-      else{
-        return 0;
-      }
-    }
-    
-  }
-
-  if (jogo.jogador == 1) {
-    let maxEval = Number.NEGATIVE_INFINITY;
-    for (let i = 0; i < jogo.velha.length; i++) {
-      for (let j = 0; j < jogo.velha[i].length; j++) {
-        if (jogo.velha[i][j] === 0) {
-          const novoJogo=cloneDeep(jogo);
-          novoJogo.jogador*=-1;
-          novoJogo.jogada+=1;
-          novoJogo.velha[i][j] = 1;
-          const eval = minimax(novoJogo, profundidade - 1, alpha, beta);
-          // jogo.velha[i][j] = 0;
-
-          maxEval = Math.max(maxEval, eval);
-          alpha = Math.max(alpha, maxEval);
-          if (beta <= alpha) {
-            break;
-          }
-        }
-      }
-    }
-    return maxEval;
-  } else {
-    if(jogo.jogador == -1){
-      let minEval = Number.POSITIVE_INFINITY;
-      for (let i = 0; i < jogo.velha.length; i++) {
-        for (let j = 0; j < jogo.velha[i].length; j++) {
-          if (jogo.velha[i][j] === 0) {
-            const novoJogo=cloneDeep(jogo);
-            novoJogo.jogador*=-1;
-            novoJogo.jogada+=1;
-            novoJogo.velha[i][j] = -1;
-            const eval = minimax(novoJogo, profundidade - 1, alpha, beta);
-            // jogo.velha[i][j] = '';
-
-            minEval = Math.min(minEval, eval);
-            beta = Math.min(beta, minEval);
-            if (beta <= alpha) {
-              break;
-            }
-          }
-        }
-      }
-      return minEval;
-    }
-    
   }
 }
-  
-
 
 function esperarParaMarcar(obj) {
   return new Promise(resolve => {
@@ -336,7 +202,6 @@ function esperarParaMarcar(obj) {
     }, 500);
   });
 }
-
 
 /**
  * Função que verifica na matriz, se há a estrutura que possua a soma esperada.
@@ -399,7 +264,6 @@ function verificarVitoria(jogo, id = (-1)) {
     }
   }
   else {
-    
     if (jogo.jogada > 3) {
       //Ao fim dos turnos verifica as condicoes de vitoria, preenche a variavel ganhador com o player caso haja ganhador e retorna true
       let somaLinha = 0;
@@ -559,7 +423,6 @@ function capturaDadosForm(e) {
   } else {
     mensagemDeErro("Nome(s) Inválido(s)!");
   }
-
 }
 
 window.onload = function () {
@@ -579,11 +442,9 @@ window.onload = function () {
       if (modo == "single") {
         player2 = "BOT";
         form.insertAdjacentHTML("beforeend", "<div class='player__field'><div class='switch-field'><input type='radio' id='radio-facil' name='dificuldade' value='facil' ><label for='radio-facil'>Fácil</label><input type='radio' id='radio-dif' name='dificuldade' value='impossivel'><label for='radio-dif'>Impossível</label></div></div>");
-
       }
       else if (modo == "multi") {
         form.insertAdjacentHTML("beforeend", "<div class='player__field'><span class='player__icon'>&#9711</span><input type='text' class='player__input' name='player2' placeholder='Player2'></div>")
-
       }
       form.insertAdjacentHTML("beforeend", "<button class='botao jogar' type='submit'>Jogar</button>");
     }
@@ -591,10 +452,3 @@ window.onload = function () {
   form.addEventListener('submit', capturaDadosForm);
   document.getElementById("reiniciar__botao").addEventListener("click", reiniciar);
 };
-
-/*
- * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash modularize exports="es" include="cloneDeep"`
- * Copyright (c) 2013-2021 The Lodash Authors.
- * MIT License <https://opensource.org/licenses/MIT>
- */
