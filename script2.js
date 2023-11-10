@@ -180,22 +180,25 @@ function botJogar(jogo) {
           let novoEstado = {
             velha: JSON.parse(JSON.stringify(jogo.velha)),
             jogada: jogo.jogada + 1,
-            jogador: -jogo.jogador,
+            jogador: -1* jogo.jogador,
             ganhador: 0,
             estruturaVitoria: null,
             principal: false
           };
           novoEstado.velha[i][j] = -1; // jogada do bot
-          valorAtual = minimax(novoEstado, 9, Infinity, -Infinity, 'player');
-          if (valorAtual > melhorValor) {
+          valorAtual = minimax(novoEstado, 9,-Infinity, Infinity, 1);
+          // console.log("VA",valorAtual);
+          if (valorAtual <= melhorValor) {
             melhorValor = valorAtual;
             melhorJogada = i * 3 + j;
           }
+          // console.log(melhorJogada);
         }
       }
     }
     if (melhorJogada === -1) {
       do {
+        // console.log("randomizou");
         botaoEscolhido = Math.floor(Math.random() * 9);
       } while (jogo.velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido % 3] != 0)
     } else {
@@ -225,12 +228,13 @@ function botJogar(jogo) {
 }
 
 function minimax(estado, profundidade, alpha, beta, jogadorAtual) {
-  if (profundidade === 0 || estado.ganhador !== 0) {
+  // console.log("rodou minimax");
+  if (verificarVitoria(estado) || profundidade === 0) {
     return estado.ganhador * (profundidade + 1);
   }
 
   let melhorValor, valorAtual;
-  if (jogadorAtual === 'bot') {
+  if (jogadorAtual === -1) {
     melhorValor = Infinity;
     for (let i = 0; i < estado.velha.length; i++) {
       for (let j = 0; j < estado.velha[0].length; j++) {
@@ -238,13 +242,13 @@ function minimax(estado, profundidade, alpha, beta, jogadorAtual) {
           let novoEstado = {
             velha: JSON.parse(JSON.stringify(estado.velha)),
             jogada: estado.jogada + 1,
-            jogador: -estado.jogador,
+            jogador: 1,
             ganhador: 0,
             estruturaVitoria: null,
             principal: false
           };
           novoEstado.velha[i][j] = -1; // jogada do bot
-          valorAtual = minimax(novoEstado, profundidade - 1, alpha, beta, 'player');
+          valorAtual = minimax(novoEstado, profundidade - 1, alpha, beta, 1);
           melhorValor = Math.min(melhorValor, valorAtual);
           alpha = Math.min(alpha, melhorValor);
           if (beta <= alpha) {
@@ -262,13 +266,13 @@ function minimax(estado, profundidade, alpha, beta, jogadorAtual) {
           let novoEstado = {
             velha: JSON.parse(JSON.stringify(estado.velha)),
             jogada: estado.jogada + 1,
-            jogador: -estado.jogador,
+            jogador: -1,
             ganhador: 0,
             estruturaVitoria: null,
             principal: false
           };
-          novoEstado.velha[i][j] = 1; // jogada do player
-          valorAtual = minimax(novoEstado, profundidade - 1, alpha, beta, 'bot');
+          novoEstado.velha[i][j] = 1; // jogada do player humano
+          valorAtual = minimax(novoEstado, profundidade - 1, alpha, beta, -1);
           melhorValor = Math.max(melhorValor, valorAtual);
           beta = Math.max(beta, melhorValor);
           if (beta <= alpha) {
