@@ -177,6 +177,7 @@ function botJogar(jogo) {
     for (let i = 0; i < jogo.velha.length; i++) {
       for (let j = 0; j < jogo.velha[0].length; j++) {
         if (jogo.velha[i][j] === 0) {
+          valorAtual=0;
           let novoEstado = {
             velha: JSON.parse(JSON.stringify(jogo.velha)),
             jogada: jogo.jogada + 1,
@@ -186,19 +187,19 @@ function botJogar(jogo) {
             principal: false
           };
           novoEstado.velha[i][j] = -1; // jogada do bot
-          valorAtual = minimax(novoEstado, 9,-Infinity, Infinity, 1);
-          // console.log("VA",valorAtual);
+          valorAtual = minimax(novoEstado, 10,-Infinity, Infinity, 1);
+          console.log("VA",i,j, "->",valorAtual);
           if (valorAtual <= melhorValor) {
             melhorValor = valorAtual;
             melhorJogada = i * 3 + j;
           }
-          // console.log(melhorJogada);
+          console.log(melhorJogada);
         }
       }
     }
     if (melhorJogada === -1) {
       do {
-        // console.log("randomizou");
+        console.log("randomizou");
         botaoEscolhido = Math.floor(Math.random() * 9);
       } while (jogo.velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido % 3] != 0)
     } else {
@@ -230,7 +231,7 @@ function botJogar(jogo) {
 function minimax(estado, profundidade, alpha, beta, jogadorAtual) {
   // console.log("rodou minimax");
   if (verificarVitoria(estado) || profundidade === 0) {
-    return estado.ganhador * (profundidade + 1);
+    return estado.ganhador * (profundidade);
   }
 
   let melhorValor, valorAtual;
@@ -248,7 +249,7 @@ function minimax(estado, profundidade, alpha, beta, jogadorAtual) {
             principal: false
           };
           novoEstado.velha[i][j] = -1; // jogada do bot
-          valorAtual = minimax(novoEstado, profundidade - 1, alpha, beta, 1);
+          valorAtual = minimax(novoEstado, profundidade -1, alpha, beta, 1);
           melhorValor = Math.min(melhorValor, valorAtual);
           alpha = Math.min(alpha, melhorValor);
           if (beta <= alpha) {
@@ -350,6 +351,7 @@ function verificarVitoria(jogo, id = (-1)) {
   if (id == -1) {
     for (let cont = 0; cont<9; cont++){
       if(verificarVitoria(jogo,cont)){
+        jogo.ganhador=jogo.velha[Math.floor(cont/3)][cont%3];
         return true
       };
     }
