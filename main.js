@@ -1,6 +1,6 @@
 const form = document.getElementById('form_players');
 
-var jogoPrincipal = {
+const jogoPrincipal = {
   velha: [[0, 0, 0],
   [0, 0, 0],
   [0, 0, 0]],
@@ -12,14 +12,20 @@ var jogoPrincipal = {
 };
 
 
-var player1 = "";
-var player2 = "";
-var modo = "";
-var dificuldade = "";
-var espera = null;
+let player1 = "";
+let player2 = "";
+let modo = "";
+let dificuldade = "";
+let espera = null;
 
-// --- FUNÇÕES DA PáGINA ---
+// --- FUNÇÕES DE INTERFACE ---
 
+/**
+ * Função que altera o tema do jogo, modificando as variáveis CSS correspondentes.
+ * @param {string} destaque Código hex da cor de destaque
+ * @param {string} secundaria Código hex da cor secundária
+ * @param {string} fundo Código hex da cor de fundo
+ * @param {string} hover Código hex da cor de hover dos botões */
 function mudarTema(destaque, secundaria, fundo, hover) {
   //passando codigos hex das cores por parâmetro é alterada no arquivo css
   document.documentElement.style.setProperty('--cor-destaque', destaque);
@@ -28,6 +34,12 @@ function mudarTema(destaque, secundaria, fundo, hover) {
   document.documentElement.style.setProperty('--cor-hover-botao', hover);
 }
 
+/**
+ * Função que verifica se os nomes dos jogadores são iguais.
+ * @param {string} nome1 Nome do jogador 1
+ * @param {string} nome2 Nome do jogador 2
+ * @returns {boolean} Retorna true se os nomes forem iguais, false caso contrário.
+ */
 function verificarNomesIguais(nome1, nome2) {
   return (nome1 === nome2);
 }
@@ -49,8 +61,12 @@ function sorteiaJogador() {
   return jogadorSorteado;
 }
 
+/**
+ * Função que alterna o jogador atual no objeto jogo e atualiza o título para indicar a vez do próximo jogador.
+ * @param {Object} jogo Objeto contendo o estado atual do jogo.
+ */
 function mudarJogador(jogo) {
-  // multiplicação por -1 faz o jogador "atual" alternar em -1 e 1. Função altera exibição do turno
+  // multiplicação por -1 faz o jogador "atual" alternar em -1 e 1.
   jogo.jogador = jogo.jogador * -1;
   if (jogo.jogador == 1) {
     document.getElementById("titulo").innerHTML = "Vez de " + player1
@@ -62,7 +78,7 @@ function mudarJogador(jogo) {
   if (modo === "single") {
     if (jogo.jogador === -1) {
       removeListenerBotoes();
-      setTimeout(() => botJogar(jogo), 500); // Delay para parecer natural
+      setTimeout(() => botJogar(jogo), 100); // Delay para parecer natural
     }
     else {
       addListenerBotoes0();
@@ -72,9 +88,16 @@ function mudarJogador(jogo) {
 
 // --- LÓGICA DO JOGO ---
 
+/**
+ * Função que prepara o tabuleiro e variáveis para iniciar/reiniciar o jogo.
+ * @param {Object} jogo Objeto contendo o jogo a ser iniciado/reiniciado.
+ */
 function iniciar(jogo) {
+  // Reset Visual do Cabeçalho e botões
   document.getElementById("titulo").classList.remove("destaque_titulo");
   let botoes = document.querySelectorAll(".botoes");
+
+  // Reset Lógico do Jogo (Matriz e DOM)
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       jogo.velha[i][j] = 0;
@@ -83,11 +106,21 @@ function iniciar(jogo) {
       botoes[3 * i + j].classList.remove("destaque__vitoria")
     }
   }
+
+  // Reset Variáveis do Jogo
   jogo.ganhador = 0;
   jogo.jogada = 0;
   jogo.estruturaVitoria = null;
   jogo.principal = true;
+
+  // Exibe dificuldade selecionada
+  const displayDif = document.getElementById("exibicao-dificuldade");
+  if (modo === "single") {
+      displayDif.innerText = dificuldade;
+  }
+  // Sorteia jogador inicial
   jogo.jogador = sorteiaJogador();
+  // Se for o bot que começa, ele joga
   if ((jogo.jogador === -1) && (modo === "single")) {
     botJogar(jogo);
   }
@@ -96,6 +129,9 @@ function iniciar(jogo) {
   }
 }
 
+/**
+ * Função que adiciona listeners de clique em todos os botões do tabuleiro que estejam vazios(no estado inicial ou após reinício do jogo).
+ */
 function addListenerBotoes0() {
   let botoes = document.querySelectorAll(".botoes");
   //2 laços for para percorrer matriz 3x3 para aplicar a classe selecionavel e "escutar" cliques de todos botões
@@ -110,17 +146,21 @@ function addListenerBotoes0() {
   }
 }
 
-function cliqueBotao(obj) {
-  if (obj.target.value == "0" && jogoPrincipal.ganhador == 0) {
-    obj.target.classList.remove("selecionavel");
-    obj.target.value = jogoPrincipal.jogador;
+/**
+ * Handler para o clique dos botões do tabuleiro, que preenche a casa clicada com a jogada do jogador atual, verifica se houve vitória ou empate e muda o jogador.
+ * @param {PointerEvent} evento - Evento de clique no botão do tabuleiro.
+ */
+function cliqueBotao(evento) {
+  if (evento.target.value == "0" && jogoPrincipal.ganhador == 0) {
+    evento.target.classList.remove("selecionavel");
+    evento.target.value = jogoPrincipal.jogador;
     if (jogoPrincipal.jogador == 1) {
-      obj.target.innerHTML = "&#10005;"
+      evento.target.innerHTML = "&#10005;"
     } else if (jogoPrincipal.jogador == -1) {
-      obj.target.innerHTML = "&#9711;"
+      evento.target.innerHTML = "&#9711;"
     }
     // substr(-1) pega o último caractere da string(id do botão)
-    let idMod = parseInt(obj.target.id.substr(-1))
+    let idMod = parseInt(evento.target.id.substr(-1))
     // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
     jogoPrincipal.velha[Math.floor(idMod / 3)][idMod % 3] = jogoPrincipal.jogador;
     if (verificarVitoria(jogoPrincipal, idMod)) {
@@ -143,14 +183,19 @@ function cliqueBotao(obj) {
 function botJogar(jogo) {
   let botaoEscolhido;
   if (dificuldade == "facil") {
+    do {
+        botaoEscolhido = Math.floor(Math.random() * 9);
+      } while (jogo.velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido % 3] != 0)
+  }
+  else if (dificuldade == "normal") {
     //soma diagonal ou linha ou coluna for igual a - 2 ele joga alinhado(+prioridade)
     //soma diagonal ou linha ou coluna for igual a 2 ele joga alinhado(-prioridade)
-    let ganhaLinha = verificaSomaAlinhada(jogo.velha, -2, "linha");
-    let ganhaColuna = verificaSomaAlinhada(jogo.velha, -2, "coluna");
-    let ganhaDiagonal = verificaSomaAlinhada(jogo.velha, -2, "diagonal");
-    let bloqLinha = verificaSomaAlinhada(jogo.velha, 2, "linha");
-    let bloqColuna = verificaSomaAlinhada(jogo.velha, 2, "coluna");
-    let bloqDiagonal = verificaSomaAlinhada(jogo.velha, 2, "diagonal");
+    let ganhaLinha = verificarSomaAlinhada(jogo.velha, -2, "linha");
+    let ganhaColuna = verificarSomaAlinhada(jogo.velha, -2, "coluna");
+    let ganhaDiagonal = verificarSomaAlinhada(jogo.velha, -2, "diagonal");
+    let bloqLinha = verificarSomaAlinhada(jogo.velha, 2, "linha");
+    let bloqColuna = verificarSomaAlinhada(jogo.velha, 2, "coluna");
+    let bloqDiagonal = verificarSomaAlinhada(jogo.velha, 2, "diagonal");
     if (ganhaLinha > -1) {
       botaoEscolhido = ganhaLinha;
     } else if (ganhaColuna > -1) {
@@ -189,7 +234,7 @@ function botJogar(jogo) {
     }
     botaoEscolhido = melhorJogada;
   }
-
+  // Preenche a jogada do bot na matriz
   jogo.velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido % 3] = jogo.jogador;
   if (jogo.principal) {
     let botoes = document.querySelectorAll(".botoes");
@@ -210,106 +255,15 @@ function botJogar(jogo) {
   }
 }
 
+
 /**
- * Função que utiliza o algoritmo Minimax com poda Alpha-Beta para determinar a melhor jogada.
- * Avalia recursivamente as possibilidades do tabuleiro para garantir que o BOT não perca.
- * @param matriz Matriz 3x3 representando o estado atual do tabuleiro.
- * @param profundidade Número que indica a distância da jogada atual (usado para pontuar vitórias rápidas).
- * @param alpha O melhor valor que o maximizador pode garantir.
- * @param beta O melhor valor que o minimizador pode garantir.
- * @param isMaximizing Booleano que define se é a vez do maximizador (BOT) ou minimizador (Player).
- * @param ultimoId O ID da última casa preenchida para verificação de vitória.
+ * Função que cria um atraso antes de marcar a jogada do bot no tabuleiro.
+ * @param {HTMLElement} obj Elemento HTML do botão a ser marcado.
+ * @returns {Promise} Promessa que é resolvida após o atraso e marcação do botão.
  */
-function minimax(matriz, profundidade, alpha, beta, isMaximizing, ultimoId) {
-    let jogadorAnterior;
-    
-    // Define quem fez a última jogada para poder avaliar o quadro
-    if (isMaximizing == true) {
-        jogadorAnterior = -1; // Se agora seria o BOT(1) a maximizar, o anterior foi o Player(-1)
-    } else {
-        jogadorAnterior = 1;  // Se agora seria o Player(-1), o anterior foi o BOT(1)
-    }
-
-    if (ultimoId !== undefined) {
-        let resultado = avaliarQuadro(matriz, ultimoId, jogadorAnterior);
-
-        if (resultado != null) {
-            // Se o vencedor foi o Player (1), retorna pontuação positiva
-            if (jogadorAnterior == 1) {
-                return 10 - profundidade;
-            } 
-            // Se o vencedor foi o BOT (-1), retorna pontuação negativa
-            else {
-                return -10 + profundidade;
-            }
-        }
-    }
-
-    // Verifica se o tabuleiro está cheio (empate)
-    let disponivel = 0;
-    for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
-            if (matriz[i][j] == 0) {
-                disponivel++;
-            }
-        }
-    }
-
-    if (disponivel == 0) {
-        return 0;
-    }
-
-    if (isMaximizing == true) {
-        let melhorScore = -Infinity;
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                if (matriz[i][j] == 0) {
-                    matriz[i][j] = 1; // Simula jogada do Player
-                    let idAtual = i * 3 + j;
-                    let score = minimax(matriz, profundidade + 1, alpha, beta, false, idAtual);
-                    matriz[i][j] = 0; // Desfaz simulação
-                    
-                    if (score > melhorScore) {
-                        melhorScore = score;
-                    }
-                    if (melhorScore > alpha) {
-                        alpha = melhorScore;
-                    }
-                    if (beta <= alpha) {
-                        break;
-                    }
-                }
-            }
-        }
-        return melhorScore;
-    } else {
-        let melhorScore = Infinity;
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                if (matriz[i][j] == 0) {
-                    matriz[i][j] = -1; // Simula jogada do BOT
-                    let idAtual = i * 3 + j;
-                    let score = minimax(matriz, profundidade + 1, alpha, beta, true, idAtual);
-                    matriz[i][j] = 0; // Desfaz simulação
-
-                    if (score < melhorScore) {
-                        melhorScore = score;
-                    }
-                    if (melhorScore < beta) {
-                        beta = melhorScore;
-                    }
-                    if (beta <= alpha) {
-                        break;
-                    }
-                }
-            }
-        }
-        return melhorScore;
-    }
-}
-
 function esperarParaMarcar(obj) {
   return new Promise(resolve => {
+    if (espera) clearTimeout(espera);
     espera = setTimeout(() => {
       if (jogoPrincipal.jogador == 1) {
         obj.innerHTML = "&#10005;";
@@ -317,128 +271,16 @@ function esperarParaMarcar(obj) {
       else if (jogoPrincipal.jogador == -1) {
         obj.innerHTML = "&#9711;";
       }
+      espera = null;
       resolve();
-    }, 500);
+    }, 100);
   });
 }
 
 /**
- * Função que verifica na matriz, se há a estrutura que possua a soma esperada.
- * Retorna a posição da casa não preenchida presente na estrutura que tenha a soma esperada. Caso não encontre, retorna -1.
- * @param matriz Objeto contendo o jogo no qual o bot vai executar a jogada.
- * @param valor Número a ser comparado durante verificação.
- * @param estrutura String ("linha","coluna" ou "diagonal") a ser executada verificação
+ * Função que destaca a estrutura vencedora no tabuleiro e exibe a mensagem de vitória ou empate no título.
+ * @param {number} id identificador do botão (de 0 a 8) que fez a jogada vencedora.
  */
-function verificaSomaAlinhada(matriz, valor, estrutura) {
-  //retorna a posição da estrutura onde deve ser jogado
-  for (let i = 0; i < 3; i++) {
-    if (estrutura == "linha") {
-      if ((matriz[i][0] + matriz[i][1] + matriz[i][2]) == valor) {
-        for (let j = 0; j < 3; j++) {
-          if (matriz[i][j] == 0) {
-            return (i * 3 + j);
-          }
-        }
-      }
-    }
-    else if (estrutura == "coluna") {
-      if ((matriz[0][i] + matriz[1][i] + matriz[2][i]) == valor) {
-        for (let j = 0; j < 3; j++) {
-          if (matriz[j][i] == 0) {
-            return (j * 3 + i);
-          }
-        }
-      }
-    }
-    else if ((estrutura == "diagonal") && (i != 1)) {
-      if ((matriz[0][i] + matriz[1][1] + matriz[2][2 - i]) == valor) {
-        if (matriz[0][i] == 0) {
-          return i;
-        }
-        else if (matriz[1][1] == 0) {
-          return 4;
-        }
-        else if (matriz[2][2 - i] == 0) {
-          return 6 + (2 - i);
-        }
-      }
-    }
-  }
-  return -1;
-}
-
-/**
- * Função que avalia o quadro do jogo da velha, retornando 1 se o player 1 venceu, -1 se o player 2 venceu e 0 caso contrário.
- * @param {number[][]} matriz uma matriz 3x3 representando o tabuleiro do jogo da velha preenchida com 1, -1 ou 0
- * @param {number} id o id do botão da jogada a ser avaliada (0 a 8)
- * @param {number} jogador o valor do jogador atual (1 ou -1)
- * @returns {string|null} uma string representando a estrutura vencedora ("linha", "coluna", "diagonal0", "diagonal2") ou null se não houver vencedor
- */
-function avaliarQuadro(matriz, id, jogador) {
-  let somaLinha = 0;
-  let somaColuna = 0;
-  let somaDiagonal0 = 0;
-  let somaDiagonal2 = 0;
-  let alvo = 3 * jogador;
-  for (let i = 0; i < 3; i++) {
-      // Soma a linha e coluna do ID clicado
-      somaLinha += matriz[Math.floor(id / 3)][i];
-      somaColuna += matriz[i][id % 3];
-      // Lógica das diagonais que você criou
-      if (id == 4) {
-        somaDiagonal0 += matriz[i][i];
-        somaDiagonal2 += matriz[i][2 - i];
-      }
-      else if (id % 8 == 0) {
-        somaDiagonal0 += matriz[i][i];
-      }
-      else if (id % 2 == 0) {
-        somaDiagonal2 += matriz[i][2 - i];
-      }
-  }
-  // Retorna a estrutura apenas se a soma atingir o alvo do jogador atual
-  if (somaDiagonal0 == alvo) return "diagonal0";
-  if (somaDiagonal2 == alvo) return "diagonal2";
-  if (somaLinha == alvo) return "linha";
-  if (somaColuna == alvo) return "coluna";
-
-  return null; // Ninguém venceu ainda
-}
-
-/**
- * Função que verifica se a condicao de vitoria foi atingida, podendo alterar ou não as variáveis ganhador e estruturaVitoria.
- * OBS: Empate na ultima rodada é tido como uma vitória sem ganhador.
- * @param id O id do botão da jogada a ser verificada.
- * @param matriz Matriz que representa o tabuleiro na qual será verificada a vitória
- */
-function verificarVitoria(jogo, id = (-1)) {
-  let resultado = false;
-  if (id == -1) {
-    for (let cont = 0; cont<9; cont++){
-      if(verificarVitoria(jogo,cont)){
-        jogo.ganhador=jogo.velha[Math.floor(cont/3)][cont%3];
-        return true
-      };
-    }
-  }
-  if (jogo.jogada > 3) {
-    //Ao fim dos turnos verifica as condicoes de vitoria, preenche a variavel ganhador com o player caso haja ganhador e retorna true
-    let estrutura = avaliarQuadro(jogo.velha, id, jogo.jogador);
-
-    if(estrutura) {
-      jogo.ganhador = jogo.jogador;
-      jogo.estruturaVitoria = estrutura;
-      resultado = true;
-    }
-    // Se ninguém ganhou e é a última jogada, é empate
-    else if (jogo.jogada === 8) {
-      jogo.estruturaVitoria = "empate";
-      resultado = true;
-    }
-  }
-  return resultado
-}
-
 function destacarFinal(id) {
   if (jogoPrincipal.ganhador == 1) {
     document.getElementById("titulo").innerText = player1 + " venceu!";
@@ -466,6 +308,10 @@ function destacarFinal(id) {
   }
 }
 
+/**
+ * Função que destaca a linha vencedora no tabuleiro.
+ * @param {number} id identificador do botão (de 0 a 8) que fez a jogada vencedora. 
+ */
 function destacarLinha(id) {
   let inicio = (Math.floor(id / 3)) * 3
   document.getElementById(('b' + inicio)).classList.add("destaque__vitoria");
@@ -473,6 +319,10 @@ function destacarLinha(id) {
   document.getElementById(('b' + (inicio + 2))).classList.add("destaque__vitoria");
 }
 
+/**
+ * Função que destaca a coluna vencedora no tabuleiro.
+ * @param {number} id identificador do botão (de 0 a 8) que fez a jogada vencedora. 
+ */
 function destacarColuna(id) {
   let inicio = id % 3
   document.getElementById(('b' + inicio)).classList.add("destaque__vitoria");
@@ -480,12 +330,19 @@ function destacarColuna(id) {
   document.getElementById(('b' + (inicio + 6))).classList.add("destaque__vitoria");
 }
 
+/**
+ * Função que destaca a diagonal vencedora no tabuleiro.
+ * @param {number} id identificador da diagonal (de 0 ou 2) que constitui a vitória.
+ */
 function destacarDiagonal(diag) {
   document.getElementById(('b4')).classList.add("destaque__vitoria");
   document.getElementById('b' + diag).classList.add("destaque__vitoria");
   document.getElementById('b' + (8 - diag)).classList.add("destaque__vitoria");
 }
 
+/**
+ * Função que remove os listeners de clique de todos os botões do tabuleiro.
+ */
 function removeListenerBotoes() {
   let botoes = document.querySelectorAll(".botoes");
   for (let i = 0; i < 3; i++) {
@@ -496,24 +353,39 @@ function removeListenerBotoes() {
   }
 }
 
+/**
+ * Função que encerra o jogo, removendo os listeners dos botões e destacando o título.
+ */
 function terminar() {
   removeListenerBotoes();
   document.getElementById("titulo").classList.add("destaque_titulo");
   clearTimeout(espera);
 }
 
+/**
+ * Função que reinicia o jogo, interrompendo o jogo atual e iniciando um novo.
+ */
 function reiniciar() {
   terminar();
   iniciar(jogoPrincipal);
 }
 
+/**
+ * Função que exibe uma mensagem de erro no formulário por um curto período.
+ * @param {string} mensagem Mensagem de erro a ser exibida.
+ */
 function mensagemDeErro(mensagem) {
+  //h3 reservado para mensagens de erro temporárias
   form.insertAdjacentHTML("beforeend", "<h3 class='conteudo__titulo' >" + mensagem + "</h3>")
   setTimeout(() => {
     document.querySelector("h3").remove();
   }, 1000);
 }
 
+/**
+ * Função que captura os dados do formulário antes de iniciar o jogo.
+ * @param {SubmitEvent} e Evento de submissão do formulário.
+ */
 function capturaDadosForm(e) {
   e.preventDefault();
   player1 = "Player1"
@@ -550,6 +422,9 @@ function capturaDadosForm(e) {
   }
 }
 
+/**
+ * Iniciador do jogo ao carregar a página, adicionando listeners aos botões de seleção de modo e ao botão de reinício.
+ */
 window.onload = function () {
   var gameMode = form.switchMode;
   for (let i = 0; i < gameMode.length; i++) {
@@ -557,16 +432,16 @@ window.onload = function () {
       modo = this.value;
       let campos = document.getElementsByClassName("player__field");
       let botaoJogar = document.getElementsByClassName("jogar");
-      for (let j = 0; j < campos.length;) {
-        campos[j].remove();
+      while (campos.length > 0) {
+        campos[0].remove();
       }
-      if (botaoJogar.length > 0) {
+      if (botaoJogar[0]) {
         botaoJogar[0].remove();
       }
       form.insertAdjacentHTML("beforeend", "<div class='player__field'><span class='player__icon'>&#10005; </span><input type='text' class='player__input' name='player1' placeholder='Player1'></div>");
       if (modo == "single") {
         player2 = "BOT";
-        form.insertAdjacentHTML("beforeend", "<div class='player__field'><div class='switch-field'><input type='radio' id='radio-facil' name='dificuldade' value='facil' ><label for='radio-facil'>Fácil</label><input type='radio' id='radio-dif' name='dificuldade' value='impossivel'><label for='radio-dif'>Impossível</label></div></div>");
+        form.insertAdjacentHTML("beforeend", "<div class='player__field'><div class='switch-field'><input type='radio' id='radio-facil' name='dificuldade' value='facil' ><label for='radio-facil'>Fácil</label><input type='radio' id='radio-normal' name='dificuldade' value='normal'><label for='radio-normal'>Normal</label><input type='radio' id='radio-dif' name='dificuldade' value='impossivel'><label for='radio-dif'>Impossível</label></div></div>");
       }
       else if (modo == "multi") {
         form.insertAdjacentHTML("beforeend", "<div class='player__field'><span class='player__icon'>&#9711;</span><input type='text' class='player__input' name='player2' placeholder='Player2'></div>")
