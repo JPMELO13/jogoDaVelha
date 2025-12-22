@@ -16,8 +16,9 @@ var player1 = "";
 var player2 = "";
 var modo = "";
 var dificuldade = "";
-
 var espera = null;
+
+// --- FUNÇÕES DA PáGINA ---
 
 function mudarTema(destaque, secundaria, fundo, hover) {
   //passando codigos hex das cores por parâmetro é alterada no arquivo css
@@ -28,11 +29,7 @@ function mudarTema(destaque, secundaria, fundo, hover) {
 }
 
 function verificarNomesIguais(nome1, nome2) {
-  let resultado = false
-  if (nome1 == nome2) {
-    resultado = true;
-  }
-  return resultado;
+  return (nome1 === nome2);
 }
 
 /**
@@ -62,16 +59,18 @@ function mudarJogador(jogo) {
     document.getElementById("titulo").innerHTML = "Vez de " + player2
   }
   jogo.jogada++;
-  if (modo == "single") {
-    if (jogo.jogador == -1) {
+  if (modo === "single") {
+    if (jogo.jogador === -1) {
       removeListenerBotoes();
-      botJogar(jogo);
+      setTimeout(() => botJogar(jogo), 500); // Delay para parecer natural
     }
     else {
       addListenerBotoes0();
     }
   }
 }
+
+// --- LÓGICA DO JOGO ---
 
 function iniciar(jogo) {
   document.getElementById("titulo").classList.remove("destaque_titulo");
@@ -89,7 +88,7 @@ function iniciar(jogo) {
   jogo.estruturaVitoria = null;
   jogo.principal = true;
   jogo.jogador = sorteiaJogador();
-  if ((jogo.jogador == -1) && (modo == "single")) {
+  if ((jogo.jogador === -1) && (modo === "single")) {
     botJogar(jogo);
   }
   else {
@@ -113,16 +112,17 @@ function addListenerBotoes0() {
 
 function cliqueBotao(obj) {
   if (obj.target.value == "0" && jogoPrincipal.ganhador == 0) {
-    obj.target.classList.remove("selecionavel")
+    obj.target.classList.remove("selecionavel");
     obj.target.value = jogoPrincipal.jogador;
     if (jogoPrincipal.jogador == 1) {
-      obj.target.innerHTML = "&#10005"
+      obj.target.innerHTML = "&#10005;"
     } else if (jogoPrincipal.jogador == -1) {
-      obj.target.innerHTML = "&#9711"
+      obj.target.innerHTML = "&#9711;"
     }
+    // substr(-1) pega o último caractere da string(id do botão)
     let idMod = parseInt(obj.target.id.substr(-1))
     // Math.floor(idMod/3) faz a "divisão inteira" no JS e % pega o resto da divisão
-    jogoPrincipal.velha[Math.floor(idMod / 3)][idMod % 3] = parseInt(obj.target.value)
+    jogoPrincipal.velha[Math.floor(idMod / 3)][idMod % 3] = jogoPrincipal.jogador;
     if (verificarVitoria(jogoPrincipal, idMod)) {
       terminar();
       destacarFinal(idMod)
@@ -132,7 +132,6 @@ function cliqueBotao(obj) {
     }
   }
 }
-
 
 
 /**
@@ -177,35 +176,18 @@ function botJogar(jogo) {
     for (let i = 0; i < jogo.velha.length; i++) {
       for (let j = 0; j < jogo.velha[0].length; j++) {
         if (jogo.velha[i][j] === 0) {
-          valorAtual=0;
-          let novoEstado = {
-            velha: JSON.parse(JSON.stringify(jogo.velha)),
-            jogada: jogo.jogada + 1,
-            jogador: -1* jogo.jogador,
-            ganhador: 0,
-            estruturaVitoria: null,
-            principal: false
-          };
-          novoEstado.velha[i][j] = -1; // jogada do bot
-          valorAtual = minimax(novoEstado, 10,-Infinity, Infinity, 1);
-          console.log("VA",i,j, "->",valorAtual);
-          if (valorAtual <= melhorValor) {
+          jogo.velha[i][j] = -1; // simula jogada do bot
+          let idAtual = i * 3 + j;
+          let valorAtual = minimax(jogo.velha, 0, -Infinity, Infinity, true, idAtual);
+          jogo.velha[i][j] = 0; // desfaz a jogada
+          if (valorAtual < melhorValor) {
             melhorValor = valorAtual;
-            melhorJogada = i * 3 + j;
+            melhorJogada = idAtual;
           }
-          console.log(melhorJogada);
         }
       }
     }
-    if (melhorJogada === -1) {
-      do {
-        console.log("randomizou");
-        botaoEscolhido = Math.floor(Math.random() * 9);
-      } while (jogo.velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido % 3] != 0)
-    } else {
-      botaoEscolhido = melhorJogada;
-    }
-    // ESCREVER PARTE FALTANTE AQUI E DEFINIR FUNÇÃO COM ALGORITMO MINIMAX FORA(COM PODA ALFA BETA)
+    botaoEscolhido = melhorJogada;
   }
 
   jogo.velha[Math.floor(botaoEscolhido / 3)][botaoEscolhido % 3] = jogo.jogador;
@@ -228,68 +210,113 @@ function botJogar(jogo) {
   }
 }
 
-function minimax(estado, profundidade, alpha, beta, jogadorAtual) {
-  // console.log("rodou minimax");
-  if (verificarVitoria(estado) || profundidade === 0) {
-    return estado.ganhador * (profundidade);
-  }
+/**
+ * Função que utiliza o algoritmo Minimax com poda Alpha-Beta para determinar a melhor jogada.
+ * Avalia recursivamente as possibilidades do tabuleiro para garantir que o BOT não perca.
+ * @param matriz Matriz 3x3 representando o estado atual do tabuleiro.
+ * @param profundidade Número que indica a distância da jogada atual (usado para pontuar vitórias rápidas).
+ * @param alpha O melhor valor que o maximizador pode garantir.
+ * @param beta O melhor valor que o minimizador pode garantir.
+ * @param isMaximizing Booleano que define se é a vez do maximizador (BOT) ou minimizador (Player).
+ * @param ultimoId O ID da última casa preenchida para verificação de vitória.
+ */
+function minimax(matriz, profundidade, alpha, beta, isMaximizing, ultimoId) {
+    let jogadorAnterior;
+    
+    // Define quem fez a última jogada para poder avaliar o quadro
+    if (isMaximizing == true) {
+        jogadorAnterior = -1; // Se agora seria o BOT(1) a maximizar, o anterior foi o Player(-1)
+    } else {
+        jogadorAnterior = 1;  // Se agora seria o Player(-1), o anterior foi o BOT(1)
+    }
 
-  let melhorValor, valorAtual;
-  if (jogadorAtual === -1) {
-    melhorValor = Infinity;
-    for (let i = 0; i < estado.velha.length; i++) {
-      for (let j = 0; j < estado.velha[0].length; j++) {
-        if (estado.velha[i][j] === 0) {
-          let novoEstado = {
-            velha: JSON.parse(JSON.stringify(estado.velha)),
-            jogada: estado.jogada + 1,
-            jogador: 1,
-            ganhador: 0,
-            estruturaVitoria: null,
-            principal: false
-          };
-          novoEstado.velha[i][j] = -1; // jogada do bot
-          valorAtual = minimax(novoEstado, profundidade -1, alpha, beta, 1);
-          melhorValor = Math.min(melhorValor, valorAtual);
-          alpha = Math.min(alpha, melhorValor);
-          if (beta <= alpha) {
-            break;
-          }
+    if (ultimoId !== undefined) {
+        let resultado = avaliarQuadro(matriz, ultimoId, jogadorAnterior);
+
+        if (resultado != null) {
+            // Se o vencedor foi o Player (1), retorna pontuação positiva
+            if (jogadorAnterior == 1) {
+                return 10 - profundidade;
+            } 
+            // Se o vencedor foi o BOT (-1), retorna pontuação negativa
+            else {
+                return -10 + profundidade;
+            }
         }
-      }
     }
-    return melhorValor;
-  } else {
-    melhorValor = -Infinity;
-    for (let i = 0; i < estado.velha.length; i++) {
-      for (let j = 0; j < estado.velha[0].length; j++) {
-        if (estado.velha[i][j] === 0) {
-          let novoEstado = {
-            velha: JSON.parse(JSON.stringify(estado.velha)),
-            jogada: estado.jogada + 1,
-            jogador: -1,
-            ganhador: 0,
-            estruturaVitoria: null,
-            principal: false
-          };
-          novoEstado.velha[i][j] = 1; // jogada do player humano
-          valorAtual = minimax(novoEstado, profundidade - 1, alpha, beta, -1);
-          melhorValor = Math.max(melhorValor, valorAtual);
-          beta = Math.max(beta, melhorValor);
-          if (beta <= alpha) {
-            break;
-          }
+
+    // Verifica se o tabuleiro está cheio (empate)
+    let disponivel = 0;
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            if (matriz[i][j] == 0) {
+                disponivel++;
+            }
         }
-      }
     }
-    return melhorValor;
-  }
+
+    if (disponivel == 0) {
+        return 0;
+    }
+
+    if (isMaximizing == true) {
+        let melhorScore = -Infinity;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (matriz[i][j] == 0) {
+                    matriz[i][j] = 1; // Simula jogada do Player
+                    let idAtual = i * 3 + j;
+                    let score = minimax(matriz, profundidade + 1, alpha, beta, false, idAtual);
+                    matriz[i][j] = 0; // Desfaz simulação
+                    
+                    if (score > melhorScore) {
+                        melhorScore = score;
+                    }
+                    if (melhorScore > alpha) {
+                        alpha = melhorScore;
+                    }
+                    if (beta <= alpha) {
+                        break;
+                    }
+                }
+            }
+        }
+        return melhorScore;
+    } else {
+        let melhorScore = Infinity;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (matriz[i][j] == 0) {
+                    matriz[i][j] = -1; // Simula jogada do BOT
+                    let idAtual = i * 3 + j;
+                    let score = minimax(matriz, profundidade + 1, alpha, beta, true, idAtual);
+                    matriz[i][j] = 0; // Desfaz simulação
+
+                    if (score < melhorScore) {
+                        melhorScore = score;
+                    }
+                    if (melhorScore < beta) {
+                        beta = melhorScore;
+                    }
+                    if (beta <= alpha) {
+                        break;
+                    }
+                }
+            }
+        }
+        return melhorScore;
+    }
 }
 
 function esperarParaMarcar(obj) {
   return new Promise(resolve => {
     espera = setTimeout(() => {
-      obj.innerHTML = "&#9711";
+      if (jogoPrincipal.jogador == 1) {
+        obj.innerHTML = "&#10005;";
+      }
+      else if (jogoPrincipal.jogador == -1) {
+        obj.innerHTML = "&#9711;";
+      }
       resolve();
     }, 500);
   });
@@ -341,6 +368,44 @@ function verificaSomaAlinhada(matriz, valor, estrutura) {
 }
 
 /**
+ * Função que avalia o quadro do jogo da velha, retornando 1 se o player 1 venceu, -1 se o player 2 venceu e 0 caso contrário.
+ * @param {number[][]} matriz uma matriz 3x3 representando o tabuleiro do jogo da velha preenchida com 1, -1 ou 0
+ * @param {number} id o id do botão da jogada a ser avaliada (0 a 8)
+ * @param {number} jogador o valor do jogador atual (1 ou -1)
+ * @returns {string|null} uma string representando a estrutura vencedora ("linha", "coluna", "diagonal0", "diagonal2") ou null se não houver vencedor
+ */
+function avaliarQuadro(matriz, id, jogador) {
+  let somaLinha = 0;
+  let somaColuna = 0;
+  let somaDiagonal0 = 0;
+  let somaDiagonal2 = 0;
+  let alvo = 3 * jogador;
+  for (let i = 0; i < 3; i++) {
+      // Soma a linha e coluna do ID clicado
+      somaLinha += matriz[Math.floor(id / 3)][i];
+      somaColuna += matriz[i][id % 3];
+      // Lógica das diagonais que você criou
+      if (id == 4) {
+        somaDiagonal0 += matriz[i][i];
+        somaDiagonal2 += matriz[i][2 - i];
+      }
+      else if (id % 8 == 0) {
+        somaDiagonal0 += matriz[i][i];
+      }
+      else if (id % 2 == 0) {
+        somaDiagonal2 += matriz[i][2 - i];
+      }
+  }
+  // Retorna a estrutura apenas se a soma atingir o alvo do jogador atual
+  if (somaDiagonal0 == alvo) return "diagonal0";
+  if (somaDiagonal2 == alvo) return "diagonal2";
+  if (somaLinha == alvo) return "linha";
+  if (somaColuna == alvo) return "coluna";
+
+  return null; // Ninguém venceu ainda
+}
+
+/**
  * Função que verifica se a condicao de vitoria foi atingida, podendo alterar ou não as variáveis ganhador e estruturaVitoria.
  * OBS: Empate na ultima rodada é tido como uma vitória sem ganhador.
  * @param id O id do botão da jogada a ser verificada.
@@ -356,54 +421,21 @@ function verificarVitoria(jogo, id = (-1)) {
       };
     }
   }
-  else {
-    if (jogo.jogada > 3) {
-      //Ao fim dos turnos verifica as condicoes de vitoria, preenche a variavel ganhador com o player caso haja ganhador e retorna true
-      let somaLinha = 0;
-      let somaColuna = 0;
-      let somaDiagonal0 = 0;
-      let somaDiagonal2 = 0;
-      for (let i = 0; i < 3; i++) {
-        somaLinha += jogo.velha[Math.floor(id / 3)][i]
-        somaColuna += jogo.velha[i][id % 3]
-        if (id == 4) {
-          somaDiagonal0 += jogo.velha[i][i];
-          somaDiagonal2 += jogo.velha[i][2 - i]
-        }
-        else if (id % 8 == 0) {
-          somaDiagonal0 += jogo.velha[i][i];
-        }
-        else if (id % 2 == 0) {
-          somaDiagonal2 += jogo.velha[i][2 - i];
-        }
-      }
-      if (somaDiagonal0 == (3 * jogo.jogador)) {
-        jogo.ganhador = jogo.jogador;
-        jogo.estruturaVitoria = "diagonal0"
-        resultado = true;
-      }
-      else if (somaDiagonal2 == (3 * jogo.jogador)) {
-        jogo.ganhador = jogo.jogador;
-        jogo.estruturaVitoria = "diagonal2"
-        resultado = true;
-      }
-      else if (somaLinha == (3 * jogo.jogador)) {
-        jogo.ganhador = jogo.jogador;
-        jogo.estruturaVitoria = "linha"
-        resultado = true;
-      }
-      else if (somaColuna == (3 * jogo.jogador)) {
-        jogo.ganhador = jogo.jogador;
-        jogo.estruturaVitoria = "coluna"
-        resultado = true;
-      }
-      else if (jogo.jogada == 8) {
-        jogo.estruturaVitoria = "empate";
-        resultado = true;
-      }
+  if (jogo.jogada > 3) {
+    //Ao fim dos turnos verifica as condicoes de vitoria, preenche a variavel ganhador com o player caso haja ganhador e retorna true
+    let estrutura = avaliarQuadro(jogo.velha, id, jogo.jogador);
+
+    if(estrutura) {
+      jogo.ganhador = jogo.jogador;
+      jogo.estruturaVitoria = estrutura;
+      resultado = true;
+    }
+    // Se ninguém ganhou e é a última jogada, é empate
+    else if (jogo.jogada === 8) {
+      jogo.estruturaVitoria = "empate";
+      resultado = true;
     }
   }
-
   return resultado
 }
 
@@ -426,7 +458,7 @@ function destacarFinal(id) {
   else if (jogoPrincipal.estruturaVitoria == "coluna") {
     destacarColuna(id);
   }
-  else if (jogoPrincipal.estruturaVitoria = "empate") {
+  else if (jogoPrincipal.estruturaVitoria == "empate") {
     destacarColuna(0);
     destacarColuna(1);
     destacarColuna(2);
@@ -485,8 +517,8 @@ function mensagemDeErro(mensagem) {
 function capturaDadosForm(e) {
   e.preventDefault();
   player1 = "Player1"
-  if (form.elements[2].value != "") {
-    player1 = form.elements[2].value;
+  if (form.player1.value != "") {
+    player1 = form.player1.value;
   }
   if (modo == "single") {
     player2 = "BOT";
@@ -494,8 +526,8 @@ function capturaDadosForm(e) {
   }// (if  modo==single)
   else {
     player2 = "Player2"
-    if (form.elements[3].value != "") {
-      player2 = form.elements[3].value;
+    if (form.player2.value != "") {
+      player2 = form.player2.value;
     }
   }//else(if modo==multi)
   if (verificarNomesIguais(player1, player2) == 0) {
@@ -531,13 +563,13 @@ window.onload = function () {
       if (botaoJogar.length > 0) {
         botaoJogar[0].remove();
       }
-      form.insertAdjacentHTML("beforeend", "<div class='player__field'><span class='player__icon'>&#10005 </span><input type='text' class='player__input' name='player1' placeholder='Player1'></div>");
+      form.insertAdjacentHTML("beforeend", "<div class='player__field'><span class='player__icon'>&#10005; </span><input type='text' class='player__input' name='player1' placeholder='Player1'></div>");
       if (modo == "single") {
         player2 = "BOT";
         form.insertAdjacentHTML("beforeend", "<div class='player__field'><div class='switch-field'><input type='radio' id='radio-facil' name='dificuldade' value='facil' ><label for='radio-facil'>Fácil</label><input type='radio' id='radio-dif' name='dificuldade' value='impossivel'><label for='radio-dif'>Impossível</label></div></div>");
       }
       else if (modo == "multi") {
-        form.insertAdjacentHTML("beforeend", "<div class='player__field'><span class='player__icon'>&#9711</span><input type='text' class='player__input' name='player2' placeholder='Player2'></div>")
+        form.insertAdjacentHTML("beforeend", "<div class='player__field'><span class='player__icon'>&#9711;</span><input type='text' class='player__input' name='player2' placeholder='Player2'></div>")
       }
       form.insertAdjacentHTML("beforeend", "<button class='botao jogar' type='submit'>Jogar</button>");
     }
