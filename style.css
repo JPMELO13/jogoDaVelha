@@ -254,55 +254,49 @@ h3{
 }
 
 .switch-field {
-    margin-bottom: 5vh;
-	display: flex;
-	overflow: hidden;
-    margin:auto;
+    display: flex;
+    overflow: hidden;
+    margin: auto auto 5vh auto;
 }
 
 .switch-field input {
-	position: absolute !important;
-	clip: rect(0, 0, 0, 0);
-	height: 1px;
-	width: 1px;
-	border: 0;
-	overflow: hidden;
+    position: absolute !important;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    width: 1px;
+    border: 0;
+    overflow: hidden;
 }
 
 .switch-field label {
-	background-color: transparent;
-	color: var(--branco);
-	text-align: center;
-	padding: 1em;
-	border: 1px solid var(--branco);
-    
+    background-color: transparent;
+    color: var(--branco);
+    text-align: center;
+    padding: 1em;
+    border: 1px solid var(--branco);
 }
 
 .switch-field label:hover {
-	cursor: pointer;
+    cursor: pointer;
     background-color: var(--cor-hover-botao);
-
 }
 
 .switch-field input:checked + label {
-	background-color: var(--cor-destaque);
-	box-shadow: inset 21px 15px 19px 9px var(--cor-secundaria); 
+    background-color: var(--cor-destaque);
+    box-shadow: inset 21px 15px 19px 9px var(--cor-secundaria);
 }
-.switch-field input:checked + label {
-	background-color: var(--cor-destaque);
-	box-shadow: inset 21px 15px 19px 9px var(--cor-secundaria); 
-}
+
 .switch-field input:checked + label:hover {
     background-color: var(--cor-hover-botao);
     box-shadow: none;
 }
 
 .switch-field label:first-of-type {
-	border-radius: 1.5em 0 0 1.5em;
+    border-radius: 1.5em 0 0 1.5em;
 }
 
 .switch-field label:last-of-type {
-	border-radius: 0 1.5em 1.5em 0;
+    border-radius: 0 1.5em 1.5em 0;
 }
 
 .inferior {
